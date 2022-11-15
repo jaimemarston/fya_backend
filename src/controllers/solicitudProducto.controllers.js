@@ -1,6 +1,7 @@
 import { request, response } from 'express';
 import { validateSolicitudProductoSchema } from '../helpers/schemaSolicitudProducto.js';
-import { SolicitudProducto } from '../models/index.js';
+import { Solicitud, SolicitudProducto } from '../models/index.js';
+import { Op } from 'sequelize';
 
 const solicitudProductoAll = async (req = request, res = response) => {
   const [producto, count] = await Promise.all([
@@ -13,6 +14,7 @@ const solicitudProductoAll = async (req = request, res = response) => {
 
 const solicitudProductoAdd = async (req = request, res = response) => {
   const { body } = req;
+  const { solicitudId } = body;
 
   const { error } = validateSolicitudProductoSchema(req.body);
   if (error) {
@@ -22,6 +24,16 @@ const solicitudProductoAdd = async (req = request, res = response) => {
   }
 
   try {
+    const resultId = await Solicitud.findOne({
+      where: {
+        [Op.and]: [{ id: solicitudId }, { estado: true }],
+      },
+    });
+
+    if (!resultId) {
+      return res.status(400).json({ message: 'No existe el usuario' });
+    }
+
     const producto = await SolicitudProducto.create({ ...body });
 
     res

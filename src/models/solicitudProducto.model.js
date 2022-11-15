@@ -18,5 +18,6 @@ export const SolicitudProducto = sequelize.define('solicitud_productos', {
   },
   estado: {
     type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 });

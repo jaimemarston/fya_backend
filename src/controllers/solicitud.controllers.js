@@ -32,9 +32,20 @@ const solicitudOne = async (req = request, res = response) => {
   };
   dataValues.productos = producto;
 
+  const suma = producto
+    .map((item) => {
+      let variable = Number(item.importe);
+      return variable;
+    })
+    .reduce((prev, curr) => prev + curr, 0);
+
   res
     .status(200)
-    .json({ message: 'Personal encontrado', personal: dataValues });
+    .json({
+      message: 'Personal encontrado',
+      personal: dataValues,
+      total: suma,
+    });
 };
 
 const solicitudAdd = async (req = request, res = response) => {

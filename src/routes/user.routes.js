@@ -7,7 +7,7 @@ import {
   userOne,
   userUpdate,
 } from '../controllers/user.controllers.js';
-import { validarJWT, haveRol } from '../middleware/index.js';
+// import { validarJWT, haveRol } from '../middleware/index.js';
 
 const router = Router();
 
@@ -21,7 +21,7 @@ router.patch('/usuario/:id', userUpdate);
 
 router.delete(
   '/usuario/:id',
-  [validarJWT, haveRol('administrador')],
+  // [validarJWT, haveRol('administrador')],
   userDelete
 );
 
