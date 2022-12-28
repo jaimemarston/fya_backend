@@ -91,18 +91,31 @@ const comisionAddAll = async (req = request, res = response) => {
 
       if (body.length - 1 === index) {
         const unicos = [...new Set(historial)];
-        let respuesta = 'Se ha creado con éxito';
-        error ? (respuesta = 'Hubo un error, revise el documento') : '';
-        existCode
-          ? (respuesta = 'Hay datos repetidos, revise datos del documento')
-          : '';
-        res.status(201).json({
-          message: `${respuesta} `,
-          historial: unicos,
-        });
+        let respuesta = '';
+
+        if (error) {
+          respuesta = 'Hubo un error, revise el documento';
+          res.status(400).json({
+            error: `${respuesta} `,
+            historial: unicos,
+          });
+        } else if (existCode) {
+          respuesta = 'Hay datos repetidos, revise datos del documento';
+          res.status(400).json({
+            repiet: `${respuesta} `,
+            historial: unicos,
+          });
+        } else {
+          let respuesta = 'Se han creado con éxito';
+          res.status(201).json({
+            message: `${respuesta} `,
+            historial: unicos,
+          });
+        }
       }
     });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: 'hable con el administrador', err });
   }
 };
