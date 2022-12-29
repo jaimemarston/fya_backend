@@ -7,7 +7,14 @@ export const registroCargo = sequelize.define('registroCargo', {
     primaryKey: true,
     autoIncrement: true,
   },
+  codigo: {
+    type: DataTypes.STRING,
+  },
   descripcion: {
     type: DataTypes.STRING,
+  },
+  estado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 });

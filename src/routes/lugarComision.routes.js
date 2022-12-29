@@ -15,7 +15,7 @@ router.get('/comision', comisionAll);
 router.get('/comision/:id', comisionOne);
 router.post('/comision', comisionAdd);
 router.post('/comisionAddAll', comisionAddAll);
-router.patch('/comision/:id', comisionUpdate);
+router.put('/comision/:id', comisionUpdate);
 router.delete('/comision/:id', comisionDelete);
 router.delete('/comisionBloque', comisionBlockDelete);
 

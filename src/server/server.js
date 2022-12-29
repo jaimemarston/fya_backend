@@ -4,8 +4,9 @@ import cors from 'cors';
 import { sequelize } from '../database/db.js';
 import {
   lugarComision,
-  solicitudProductoRoutes,
-  solicitudRoutes,
+  registroDocumento,
+  // solicitudProductoRoutes,
+  // solicitudRoutes,
 } from '../routes/index.js';
 // import {
 //   userRoutes,
@@ -15,7 +16,6 @@ import {
 // } from '../routes/index.js';
 
 // import '../models/index.js';
-
 class Server {
   constructor() {
     this.app = express();
@@ -42,10 +42,10 @@ class Server {
   }
 
   routes() {
-    // this.app.use('/api', userRoutes);
     // this.app.use('/api', authLogin);
-    this.app.use('/api', solicitudRoutes);
-    this.app.use('/api', solicitudProductoRoutes);
+    // this.app.use('/api', solicitudRoutes);
+    // this.app.use('/api', solicitudProductoRoutes);
+    this.app.use('/api', registroDocumento);
     this.app.use('/api', lugarComision);
   }
 
