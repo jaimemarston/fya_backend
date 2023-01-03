@@ -4,9 +4,8 @@ import cors from 'cors';
 import { sequelize } from '../database/db.js';
 import {
   lugarComision,
+  registroCargo,
   registroDocumento,
-  // solicitudProductoRoutes,
-  // solicitudRoutes,
 } from '../routes/index.js';
 // import {
 //   userRoutes,
@@ -27,8 +26,8 @@ class Server {
 
   connection = async () => {
     try {
-      // await sequelize.sync({ force: true });
-      await sequelize.authenticate();
+      await sequelize.sync({ force: true });
+      // await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
     } catch (error) {
       console.log(error);
@@ -45,6 +44,7 @@ class Server {
     // this.app.use('/api', authLogin);
     // this.app.use('/api', solicitudRoutes);
     // this.app.use('/api', solicitudProductoRoutes);
+    this.app.use('/api', registroCargo);
     this.app.use('/api', registroDocumento);
     this.app.use('/api', lugarComision);
   }
