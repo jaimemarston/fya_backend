@@ -5,12 +5,13 @@
 
 import lugarComision from './lugarComision.routes.js';
 import registroDocumento from './registroDocumento.routes.js';
-
+import registroCargo from './registroCargo.router.js';
 export {
   //   userRoutes,
   //   authLogin,
   lugarComision,
   registroDocumento,
+  registroCargo,
   // solicitudProductoRoutes,
   // solicitudRoutes,
 };

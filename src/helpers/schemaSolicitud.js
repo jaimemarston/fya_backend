@@ -3,19 +3,19 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const schemaSolicitud = Joi.object({
-  numeroSolicitud: Joi.number()
-    .required()
-    .error((errors) => {
-      errors.forEach((data) => {
-        if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'La descripción no debe estar vació')
-          );
-        }
-      });
-      return errors;
-    }),
+  // numeroSolicitud: Joi.number()
+  //   .required()
+  //   .error((errors) => {
+  //     errors.forEach((data) => {
+  //       if (data.code === 'string.empty') {
+  //         console.log(
+  //           '=>',
+  //           (data.message = 'La descripción no debe estar vació')
+  //         );
+  //       }
+  //     });
+  //     return errors;
+  //   }),
   fechaRegistro: Joi.string()
     .required()
     .error((errors) => {

@@ -50,8 +50,8 @@ const solicitudAdd = async (req = request, res = response) => {
   const { body } = req;
   const { numeroSolicitud } = body;
   const { error } = validateSolicitud(req.body);
+
   if (error) {
-    console.log(error);
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
   }
@@ -62,16 +62,16 @@ const solicitudAdd = async (req = request, res = response) => {
     if (personal) {
       return res.status(404).json({ message: 'Ya existe el personal' });
     }
-
+    console.log(body);
     const newPersonal = await Solicitud.create({ ...body });
 
     res.status(201).json({
       message: 'El personal ha sido creado con éxito',
       personal: newPersonal,
     });
-  } catch (error) {
-    console.log('=>', error);
-    throw new Error(error);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
 
