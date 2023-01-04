@@ -2,7 +2,7 @@ import Joi from 'joi';
 const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
-const schemaLugarSolicitud = Joi.object({
+const schemaRegistroProyecto = Joi.object({
   codigo: Joi.string()
     .required()
     .error((errors) => {
@@ -17,12 +17,12 @@ const schemaLugarSolicitud = Joi.object({
       });
       return errors;
     }),
-  descripcion: Joi.string()
+  nombreAbreviado: Joi.string()
     .required()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
-          data.message = 'La descripción es requerida';
+          data.message = 'El nombre abr es requerido';
         }
 
         if (data.code === 'string.base') {
@@ -30,12 +30,30 @@ const schemaLugarSolicitud = Joi.object({
         }
 
         if (data.code === 'string.empty') {
-          data.message = 'La descripción no debe estar vació';
+          data.message = 'El nombre no debe estar vació';
+        }
+      });
+      return errors;
+    }),
+  nombreCompleto: Joi.string()
+    .required()
+    .error((errors) => {
+      errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El nombre es requerida';
+        }
+
+        if (data.code === 'string.base') {
+          data.message = 'No se permite ingresar números';
+        }
+
+        if (data.code === 'string.empty') {
+          data.message = 'El nombre no debe estar vació';
         }
       });
       return errors;
     }),
 });
 
-const validateLugarSolicitud = validator(schemaLugarSolicitud);
-export { validateLugarSolicitud };
+const validateRegistroProyecto = validator(schemaRegistroProyecto);
+export { validateRegistroProyecto };

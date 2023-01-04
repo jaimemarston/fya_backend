@@ -1,13 +1,13 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
 
-export const registroProyecto = sequelize.define('registroProyecto', {
+export const RegistroProyecto = sequelize.define('registroProyecto', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  codigoContable: {
+  codigo: {
     type: DataTypes.STRING,
   },
   nombreAbreviado: {
@@ -15,5 +15,9 @@ export const registroProyecto = sequelize.define('registroProyecto', {
   },
   nombreCompleto: {
     type: DataTypes.STRING,
+  },
+  estado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 });

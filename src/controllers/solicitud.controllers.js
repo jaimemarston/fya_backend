@@ -48,7 +48,7 @@ const solicitudOne = async (req = request, res = response) => {
 
 const solicitudAdd = async (req = request, res = response) => {
   const { body } = req;
-  const { numeroSolicitud } = body;
+
   const { error } = validateSolicitud(req.body);
 
   if (error) {
@@ -57,12 +57,18 @@ const solicitudAdd = async (req = request, res = response) => {
   }
 
   try {
+    const lista = await Solicitud.findAll({
+      order: ['id'],
+    });
+
+    let numeroSolicitud = `ABC0000${lista.length + 1}`;
+    body.numeroSolicitud = numeroSolicitud;
     const personal = await Solicitud.findOne({ where: { numeroSolicitud } });
 
     if (personal) {
       return res.status(404).json({ message: 'Ya existe el personal' });
     }
-    console.log(body);
+
     const newPersonal = await Solicitud.create({ ...body });
 
     res.status(201).json({

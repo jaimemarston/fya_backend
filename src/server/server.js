@@ -6,15 +6,11 @@ import {
   lugarComision,
   registroCargo,
   registroDocumento,
+  registroProyecto,
+  solicitudProductoRoutes,
+  solicitudRoutes,
 } from '../routes/index.js';
-// import {
-//   userRoutes,
-//   authLogin,
-//   solicitudProductoRoutes,
-//   solicitudRoutes,
-// } from '../routes/index.js';
-
-// import '../models/index.js';
+registroProyecto;
 class Server {
   constructor() {
     this.app = express();
@@ -42,8 +38,9 @@ class Server {
 
   routes() {
     // this.app.use('/api', authLogin);
-    // this.app.use('/api', solicitudRoutes);
-    // this.app.use('/api', solicitudProductoRoutes);
+    this.app.use('/api', solicitudRoutes);
+    this.app.use('/api', solicitudProductoRoutes);
+    this.app.use('/api', registroProyecto);
     this.app.use('/api', registroCargo);
     this.app.use('/api', registroDocumento);
     this.app.use('/api', lugarComision);
