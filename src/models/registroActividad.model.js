@@ -1,19 +1,31 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
 
-export const RegistroProyecto = sequelize.define('registroProyecto', {
+export const RegistroActividad = sequelize.define('registroActividad', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  codigo: {
+  nombreApellido: {
     type: DataTypes.STRING,
   },
-  nombreAbreviado: {
+  destino: {
     type: DataTypes.STRING,
   },
-  nombreCompleto: {
+  fechaInicio: {
+    type: DataTypes.STRING,
+  },
+  fechaFin: {
+    type: DataTypes.STRING,
+  },
+  objetoComision: {
+    type: DataTypes.STRING,
+  },
+  detalleActividad: {
+    type: DataTypes.STRING,
+  },
+  otros: {
     type: DataTypes.STRING,
   },
   estado: {

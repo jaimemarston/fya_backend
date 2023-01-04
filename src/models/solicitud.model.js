@@ -9,7 +9,7 @@ export const Solicitud = sequelize.define('solicitudes', {
     autoIncrement: true,
   },
   numeroSolicitud: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   fechaRegistro: {
     type: DataTypes.STRING,

@@ -147,7 +147,7 @@ const comisionUpdate = async (req = request, res = response) => {
     );
 
     res.json({
-      message: 'Lugar de comision actualizado',
+      message: 'Lugar de comisión actualizado',
       lugar: { ...body },
     });
   } catch (err) {
@@ -180,7 +180,7 @@ const comisionBlockDelete = (req = request, res = response) => {
       // }
       await lugarComision.update({ estado: false });
       if (body.length - 1 === index) {
-        res.status(200).json({ message: 'Se han eliminado con exito' });
+        res.status(200).json({ message: 'Se han eliminado con éxito' });
       }
     });
   } catch (err) {
