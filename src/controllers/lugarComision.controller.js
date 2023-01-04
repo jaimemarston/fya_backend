@@ -147,7 +147,7 @@ const comisionUpdate = async (req = request, res = response) => {
     );
 
     res.json({
-      message: 'Lugar de comision actualizado',
+      message: 'Lugar de comisión actualizado',
       lugar: { ...body },
     });
   } catch (err) {

@@ -1,3 +1,5 @@
+export { RegistroActividad } from './registroActividad.model.js';
+
 export { Solicitud } from './solicitud.model.js';
 export { SolicitudProducto } from './solicitudProducto.model.js';
 
