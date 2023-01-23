@@ -3,38 +3,56 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const schemaSolicitudProducto = Joi.object({
-  descripcion: Joi.string()
+  descripcion: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
-        if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'La descripción no debe estar vació')
-          );
+        if (data.code === 'any.required') {
+          data.message = 'La descripción es requerido';
+        }
+        if (data.code === 'number.base') {
+          data.message = 'Solo se permiten números';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
     }),
-  partidaPresupuestal: Joi.string()
+  partidaPresupuestal: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
-        if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'La partida presupuestal no debe estar vació')
-          );
+        if (data.code === 'any.required') {
+          data.message = 'La partida presupuestal es requerido';
+        }
+        if (data.code === 'number.base') {
+          data.message = 'Solo se permiten números';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
     }),
   importe: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El importe es requerido';
+        }
         if (data.code === 'number.base') {
-          console.log('=>', (data.message = 'Debe ingresar números'));
+          data.message = 'Solo se permiten números';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
@@ -43,15 +61,13 @@ const schemaSolicitudProducto = Joi.object({
   solicitudId: Joi.number()
     .required()
     .error((errors) => {
+      console.log('errors', errors);
       errors.forEach((data) => {
-        if (data.code === 'number.base') {
-          console.log(
-            '=>',
-            (data.message = 'Debe ingresar el Id de la solicitud')
-          );
-        }
         if (data.code === 'any.required') {
-          console.log('=>', (data.message = 'Solicitud Id es requerida'));
+          data.message = 'Solicitud Id es requerida';
+        }
+        if (data.code === 'number.base') {
+          data.message = 'Debe ingresar el Id de la solicitud';
         }
       });
       return errors;

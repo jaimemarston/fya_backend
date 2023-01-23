@@ -1,6 +1,10 @@
 import { request, response } from 'express';
 import { validateSolicitudProductoSchema } from '../helpers/schemaSolicitudProducto.js';
-import { Solicitud, SolicitudProducto } from '../models/index.js';
+import {
+  RegistroProyecto,
+  Solicitud,
+  SolicitudProducto,
+} from '../models/index.js';
 import { Op } from 'sequelize';
 
 const solicitudProductoAll = async (req = request, res = response) => {
@@ -8,17 +12,16 @@ const solicitudProductoAll = async (req = request, res = response) => {
     SolicitudProducto.findAll(),
     SolicitudProducto.count(),
   ]);
-  // const data = count + 1;
+
   res.status(200).json({ message: 'Lista de Productos', producto, count });
 };
 
 const solicitudProductoAdd = async (req = request, res = response) => {
   const { body } = req;
-  const { solicitudId } = body;
-
+  const { solicitudId, partidaPresupuestal } = body;
+  console.log(body);
   const { error } = validateSolicitudProductoSchema(req.body);
   if (error) {
-    console.log(error);
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
   }
@@ -30,6 +33,14 @@ const solicitudProductoAdd = async (req = request, res = response) => {
       },
     });
 
+    const exitsProyecto = await RegistroProyecto.findOne({
+      where: { id: partidaPresupuestal },
+    });
+    // console.log('exitsProyecto =>', exitsProyecto);
+    if (!exitsProyecto) {
+      return res.status(404).json({ message: 'No existe el proyecto' });
+    }
+
     if (!resultId) {
       return res.status(400).json({ message: 'No existe el usuario' });
     }
@@ -40,7 +51,8 @@ const solicitudProductoAdd = async (req = request, res = response) => {
       .status(201)
       .json({ message: 'El producto ha sido creado con éxito', producto });
   } catch (error) {
-    throw new Error(error);
+    console.log(error);
+    res.status(400).json({ message: 'hable con el administrador' });
   }
 };
 

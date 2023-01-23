@@ -3,25 +3,15 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const schemaSolicitud = Joi.object({
-  // numeroSolicitud: Joi.number()
-  //   .required()
-  //   .error((errors) => {
-  //     errors.forEach((data) => {
-  //       if (data.code === 'string.empty') {
-  //         console.log(
-  //           '=>',
-  //           (data.message = 'La descripción no debe estar vació')
-  //         );
-  //       }
-  //     });
-  //     return errors;
-  //   }),
   fechaRegistro: Joi.string()
     .required()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'La fecha de registro es requerido';
+        }
         if (data.code === 'string.empty') {
-          console.log('=>', (data.message = 'Debe ingresar una fecha'));
+          data.message = 'La fecha de registro no debe estar vació';
         }
       });
       return errors;
@@ -30,21 +20,29 @@ const schemaSolicitud = Joi.object({
     .required()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El nombres es requerido';
+        }
         if (data.code === 'string.empty') {
-          console.log('=>', (data.message = 'Debe ingresar el nombre'));
+          data.message = 'El nombres no debe estar vació';
         }
       });
       return errors;
     }),
-  nombreProyecto: Joi.string()
+  nombreProyecto: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
-        if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'Debe ingresar el nombre del proyecto')
-          );
+        if (data.code === 'any.required') {
+          data.message = 'El nombre del proyecto es requerido';
+        }
+        if (data.code === 'number.base') {
+          data.message = 'Solo se permiten números';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
@@ -53,11 +51,11 @@ const schemaSolicitud = Joi.object({
     .required()
     .error((errors) => {
       errors.forEach((data) => {
-        if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'Debe ingresar el lugar de comisión')
-          );
+        if (data.code === 'any.required') {
+          data.message = 'El lugar de comisión es requerido';
+        }
+        if (data.code === 'string.base') {
+          data.message = 'El lugar de comisión no debe estar vació';
         }
       });
       return errors;
@@ -66,11 +64,11 @@ const schemaSolicitud = Joi.object({
     .required()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El itinerario de transporte es requerido';
+        }
         if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'Debe ingresar el lugar de comisión')
-          );
+          data.message = 'El itinerario de transporte no debe estar vació';
         }
       });
       return errors;
@@ -79,11 +77,11 @@ const schemaSolicitud = Joi.object({
     .required()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El objeto de comisión es requerido';
+        }
         if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'Debe ingresar un objeto de comisión')
-          );
+          data.message = 'El objeto de comisión no debe estar vació';
         }
       });
       return errors;
@@ -92,11 +90,11 @@ const schemaSolicitud = Joi.object({
     .required()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'La fecha de inicio es requerido';
+        }
         if (data.code === 'string.empty') {
-          console.log(
-            '=>',
-            (data.message = 'Debe ingresar la fecha de inicio')
-          );
+          data.message = 'La fecha de inicio no debe estar vació';
         }
       });
       return errors;
@@ -105,8 +103,11 @@ const schemaSolicitud = Joi.object({
     .required()
     .error((errors) => {
       errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'La fecha de fin es requerido';
+        }
         if (data.code === 'string.empty') {
-          console.log('=>', (data.message = 'Debe ingresar la fecha de fin'));
+          data.message = 'La fecha de fin no debe estar vació';
         }
       });
       return errors;
