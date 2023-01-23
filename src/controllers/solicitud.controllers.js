@@ -1,6 +1,10 @@
 import { request, response } from 'express';
 import { validateSolicitud } from '../helpers/schemaSolicitud.js';
-import { Solicitud, SolicitudProducto } from '../models/index.js';
+import {
+  RegistroProyecto,
+  Solicitud,
+  SolicitudProducto,
+} from '../models/index.js';
 
 const solicitudAll = async (req = request, res = response) => {
   const [personal, count] = await Promise.all([
@@ -11,7 +15,7 @@ const solicitudAll = async (req = request, res = response) => {
     }),
     Solicitud.count({ where: { estado: true } }),
   ]);
-
+  // console.log(personal);
   res.status(200).json({ message: 'Lista de usuarios', personal, count });
 };
 
@@ -48,9 +52,8 @@ const solicitudOne = async (req = request, res = response) => {
 
 const solicitudAdd = async (req = request, res = response) => {
   const { body } = req;
-
+  const { nombreProyecto } = body;
   const { error } = validateSolicitud(req.body);
-
   if (error) {
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
@@ -61,13 +64,42 @@ const solicitudAdd = async (req = request, res = response) => {
       order: ['id'],
     });
 
-    let numeroSolicitud = `ABC0000${lista.length + 1}`;
-    body.numeroSolicitud = numeroSolicitud;
-    const personal = await Solicitud.findOne({ where: { numeroSolicitud } });
+    let nroLista = lista.length + 1;
+    let nroSolicitud;
 
-    if (personal) {
-      return res.status(404).json({ message: 'Ya existe el personal' });
+    if (nroLista <= 9) {
+      nroSolicitud = `ABC00000${nroLista}`;
+    } else if (nroLista <= 99) {
+      nroSolicitud = `ABC0000${nroLista}`;
+    } else if (nroLista <= 999) {
+      nroSolicitud = `ABC000${nroLista}`;
+    } else if (nroLista <= 9999) {
+      nroSolicitud = `ABC00${nroLista}`;
+    } else if (nroLista <= 99999) {
+      nroSolicitud = `ABC0${nroLista}`;
+    } else {
+      nroSolicitud = `ABC${nroLista}`;
     }
+
+    body.numeroSolicitud = nroSolicitud;
+
+    const exitsProyecto = await RegistroProyecto.findOne({
+      where: { id: nombreProyecto },
+    });
+    // console.log('exitsProyecto =>', exitsProyecto);
+    if (!exitsProyecto) {
+      return res.status(404).json({ message: 'No existe el proyecto' });
+    }
+
+    // console.clear();
+    // console.log(exitsProyecto);
+    // body.lugarComision = lgComision.descripcion;
+
+    // const personal = await Solicitud.findOne({ where: { numeroSolicitud } });
+
+    // if (personal) {
+    //   return res.status(404).json({ message: 'Ya existe el personal' });
+    // }
 
     const newPersonal = await Solicitud.create({ ...body });
 
