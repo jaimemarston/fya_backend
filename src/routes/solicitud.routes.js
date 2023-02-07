@@ -15,7 +15,7 @@ router.get('/solicitud/:id', solicitudOne);
 
 router.post('/solicitud', solicitudAdd);
 
-router.patch('/solicitud/:id', solicitudUpdate);
+router.put('/solicitud/:id', solicitudUpdate);
 
 router.delete('/solicitud/:id', solicitudDelete);
 

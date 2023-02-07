@@ -1,6 +1,6 @@
 import { request, response } from 'express';
 import { validateRendicionGastos } from '../helpers/schemaRendicionGastos.js';
-import { RendicionGastos } from '../models/index.js';
+import { RegistroProyecto, RendicionGastos } from '../models/index.js';
 
 const rendGastosOne = async (req = request, res = response) => {
   const { id } = req.params;
@@ -10,11 +10,9 @@ const rendGastosOne = async (req = request, res = response) => {
     });
 
     if (!rendicionGastos) {
-      return res
-        .status(404)
-        .json({ message: 'Lugar de comisión no encontrado' });
+      return res.status(404).json({ message: 'Id no encontrado' });
     }
-    res.status(200).json({ message: 'Lugar encontrado', rendicionGastos });
+    res.status(200).json({ message: 'Rendición encontrado', rendicionGastos });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
@@ -32,7 +30,7 @@ const rendGastosAll = async (req = request, res = response) => {
       }),
     ]);
     res.status(200).json({
-      message: 'Lista de lugares de comisión',
+      message: 'Lista de rendición de gastos',
       rendicionGastos,
       count,
     });
@@ -43,28 +41,50 @@ const rendGastosAll = async (req = request, res = response) => {
 
 const rendGastosAdd = async (req = request, res = response) => {
   const { body } = req;
+  const { proyecto } = body;
   const { error } = validateRendicionGastos(req.body);
   if (error) {
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
   }
-  console.log(error);
-  // console.log(body);
+
   try {
-    //  const existCode = await RegistroActividad.findOne({
-    //    where: { codigo: body.codigo },
-    //  });
+    const lista = await RendicionGastos.findAll({
+      order: ['id'],
+    });
 
-    //  if (existCode) {
-    //    return res.status(404).json({ message: 'El código ya existe' });
-    //  }
+    let nroLista = lista.length + 1;
+    let nroSolicitud;
 
+    if (nroLista <= 9) {
+      nroSolicitud = `ABC00000${nroLista}`;
+    } else if (nroLista <= 99) {
+      nroSolicitud = `ABC0000${nroLista}`;
+    } else if (nroLista <= 999) {
+      nroSolicitud = `ABC000${nroLista}`;
+    } else if (nroLista <= 9999) {
+      nroSolicitud = `ABC00${nroLista}`;
+    } else if (nroLista <= 99999) {
+      nroSolicitud = `ABC0${nroLista}`;
+    } else {
+      nroSolicitud = `ABC${nroLista}`;
+    }
+
+    body.numeroRendicion = nroSolicitud;
+
+    const exitsProyecto = await RegistroProyecto.findOne({
+      where: { id: proyecto },
+    });
+
+    if (!exitsProyecto) {
+      return res.status(404).json({ message: 'No existe el proyecto' });
+    }
     const rendicionGastos = await RendicionGastos.create({ ...body });
+
     res
       .status(201)
       .json({ message: 'Se ha creado con éxito', rendicionGastos });
   } catch (err) {
-    // console.log('=>', err);
     res.status(400).json({ message: 'hable con el administrador', err });
   }
 };
@@ -89,7 +109,7 @@ const rendGastosUpdate = async (req = request, res = response) => {
     );
 
     res.json({
-      message: 'Lugar de comisión actualizado',
+      message: 'Rendicion de gastos actualizado',
       lugar: { ...body },
     });
   } catch (err) {

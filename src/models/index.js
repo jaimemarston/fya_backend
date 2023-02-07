@@ -1,4 +1,5 @@
 export { RendicionGastos } from './rendicionGastos.model.js';
+export { RendicionGastosProducto } from './rendicionGastosProducto.model.js';
 
 export { RegistroActividad } from './registroActividad.model.js';
 

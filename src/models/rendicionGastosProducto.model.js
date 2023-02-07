@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
 
-export const SolicitudProducto = sequelize.define('solicitud_productos', {
+export const RendicionGastosProducto = sequelize.define('solicitud_productos', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -10,11 +10,20 @@ export const SolicitudProducto = sequelize.define('solicitud_productos', {
   fecha: {
     type: DataTypes.STRING,
   },
-  tipo: {
+  rendicionGastosId: {
+    type: DataTypes.INTEGER,
+  },
+  serie: {
     type: DataTypes.STRING,
   },
   numero: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
+  },
+  tipo: {
+    type: DataTypes.INTEGER,
+  },
+  ruc: {
+    type: DataTypes.INTEGER,
   },
   descripcion: {
     type: DataTypes.STRING,

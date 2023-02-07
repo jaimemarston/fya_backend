@@ -19,7 +19,7 @@ export const Solicitud = sequelize.define('solicitudes', {
     type: DataTypes.STRING,
   },
   nombreProyecto: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
   },
   lugarComision: {
     type: DataTypes.STRING,
