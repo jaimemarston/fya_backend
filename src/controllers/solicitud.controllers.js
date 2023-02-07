@@ -7,7 +7,7 @@ import {
 } from '../models/index.js';
 
 const solicitudAll = async (req = request, res = response) => {
-  const [personal, count] = await Promise.all([
+  const [datos, count] = await Promise.all([
     Solicitud.findAll({
       order: ['id'],
       where: { estado: true },
@@ -15,8 +15,21 @@ const solicitudAll = async (req = request, res = response) => {
     }),
     Solicitud.count({ where: { estado: true } }),
   ]);
-  // console.log(personal);
-  res.status(200).json({ message: 'Lista de usuarios', personal, count });
+  // const personal = datos.map(async (item, index) => {
+  //   let variable = index + 1;
+  //   const exitsProyecto = await RegistroProyecto.findOne({
+  //     where: { id: item.nombreProyecto },
+  //   });
+  //   item.nombreProyecto = exitsProyecto.dataValues.nombreAbreviado;
+  //   if (datos.length === variable) {
+  //     return item;
+  //   }
+  //   console.log(item);
+  // });
+
+  res
+    .status(200)
+    .json({ message: 'Lista de usuarios', personal: datos, count });
 };
 
 const solicitudOne = async (req = request, res = response) => {
@@ -56,7 +69,7 @@ const solicitudAdd = async (req = request, res = response) => {
   const { error } = validateSolicitud(req.body);
   if (error) {
     const err = error.details[0].message;
-    return res.status(400).json({ message: err });
+    return res.status(400).json({ message: err, error: 'Error al digitar' });
   }
 
   try {

@@ -26,6 +26,9 @@ const schemaSolicitud = Joi.object({
         if (data.code === 'string.empty') {
           data.message = 'El nombres no debe estar vació';
         }
+        if (data.code === 'string.base') {
+          data.message = 'No se permiten números';
+        }
       });
       return errors;
     }),
@@ -57,6 +60,9 @@ const schemaSolicitud = Joi.object({
         if (data.code === 'string.base') {
           data.message = 'El lugar de comisión no debe estar vació';
         }
+        if (data.code === 'string.base') {
+          data.message = 'No se permiten números';
+        }
       });
       return errors;
     }),
@@ -70,6 +76,9 @@ const schemaSolicitud = Joi.object({
         if (data.code === 'string.empty') {
           data.message = 'El itinerario de transporte no debe estar vació';
         }
+        if (data.code === 'string.base') {
+          data.message = 'No se permiten números';
+        }
       });
       return errors;
     }),
@@ -82,6 +91,9 @@ const schemaSolicitud = Joi.object({
         }
         if (data.code === 'string.empty') {
           data.message = 'El objeto de comisión no debe estar vació';
+        }
+        if (data.code === 'string.base') {
+          data.message = 'No se permiten números';
         }
       });
       return errors;

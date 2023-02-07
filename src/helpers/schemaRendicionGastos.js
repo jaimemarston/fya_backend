@@ -12,7 +12,7 @@ const schemaRendicionGastos = Joi.object({
         }
 
         if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
+          data.message = 'No se permiten números';
         }
 
         if (data.code === 'string.empty') {
@@ -21,33 +21,31 @@ const schemaRendicionGastos = Joi.object({
       });
       return errors;
     }),
-  proyecto: Joi.string()
+  proyecto: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
           data.message = 'El proyecto es requerido';
         }
-
-        if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
+        if (data.code === 'number.base') {
+          data.message = 'Solo se permiten números';
         }
-
-        if (data.code === 'string.empty') {
-          data.message = 'El proyecto no debe estar vació';
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
     }),
-  lugarComision: Joi.number()
+  lugarComision: Joi.string()
     .required()
     .error((errors) => {
-      console.log('=>', errors);
       errors.forEach((data) => {
         if (data.code === 'any.required') {
           data.message = 'El lugar de comisión es requerido';
         }
-
         if (data.code === 'string.empty') {
           data.message = 'El lugar de comisión no debe estar vació';
         }
@@ -63,7 +61,7 @@ const schemaRendicionGastos = Joi.object({
         }
 
         if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
+          data.message = 'No se permiten números';
         }
 
         if (data.code === 'string.empty') {
@@ -79,11 +77,6 @@ const schemaRendicionGastos = Joi.object({
         if (data.code === 'any.required') {
           data.message = 'La fecha de inicio es requerido';
         }
-
-        if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
-        }
-
         if (data.code === 'string.empty') {
           data.message = 'La fecha de inicio no debe estar vació';
         }
@@ -97,11 +90,6 @@ const schemaRendicionGastos = Joi.object({
         if (data.code === 'any.required') {
           data.message = 'La fecha de fin es requerido';
         }
-
-        if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
-        }
-
         if (data.code === 'string.empty') {
           data.message = 'La fecha de fin no debe estar vació';
         }
@@ -109,60 +97,60 @@ const schemaRendicionGastos = Joi.object({
       return errors;
     }),
 
-  recibido: Joi.string()
-    .required()
-    .error((errors) => {
-      errors.forEach((data) => {
-        if (data.code === 'any.required') {
-          data.message = 'El recibido es requerido';
-        }
-
-        if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
-        }
-
-        if (data.code === 'string.empty') {
-          data.message = 'El recibido no debe estar vació';
-        }
-      });
-      return errors;
-    }),
-  rendido: Joi.string()
-    .required()
-    .error((errors) => {
-      errors.forEach((data) => {
-        if (data.code === 'any.required') {
-          data.message = 'El rendido es requerido';
-        }
-
-        if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
-        }
-
-        if (data.code === 'string.empty') {
-          data.message = 'El rendido no debe estar vació';
-        }
-      });
-      return errors;
-    }),
-  saldo: Joi.string()
-    .required()
-    .error((errors) => {
-      errors.forEach((data) => {
-        if (data.code === 'any.required') {
-          data.message = 'El saldo es requerido';
-        }
-
-        if (data.code === 'string.base') {
-          data.message = 'No se permite ingresar números';
-        }
-
-        if (data.code === 'string.empty') {
-          data.message = 'El saldo no debe estar vació';
-        }
-      });
-      return errors;
-    }),
+  // recibido: Joi.number()
+  //   .required()
+  //   .positive()
+  //   .integer()
+  //   .error((errors) => {
+  //     errors.forEach((data) => {
+  //       if (data.code === 'any.required') {
+  //         data.message = 'El recibido es requerido';
+  //       }
+  //       if (data.code === 'number.base') {
+  //         data.message = 'Solo se permiten números';
+  //       }
+  //       if (data.code === 'number.positive') {
+  //         data.message = 'Ingrese números positivos';
+  //       }
+  //     });
+  //     return errors;
+  //   }),
+  // rendido: Joi.number()
+  //   .required()
+  //   .positive()
+  //   .integer()
+  //   .error((errors) => {
+  //     errors.forEach((data) => {
+  //       if (data.code === 'any.required') {
+  //         data.message = 'El rendido es requerido';
+  //       }
+  //       if (data.code === 'number.base') {
+  //         data.message = 'Solo se permiten números';
+  //       }
+  //       if (data.code === 'number.positive') {
+  //         data.message = 'Ingrese números positivos';
+  //       }
+  //     });
+  //     return errors;
+  //   }),
+  // saldo: Joi.number()
+  //   .required()
+  //   .positive()
+  //   .integer()
+  //   .error((errors) => {
+  //     errors.forEach((data) => {
+  //       if (data.code === 'any.required') {
+  //         data.message = 'El saldo es requerido';
+  //       }
+  //       if (data.code === 'number.base') {
+  //         data.message = 'Solo se permiten números';
+  //       }
+  //       if (data.code === 'number.positive') {
+  //         data.message = 'Ingrese números positivos';
+  //       }
+  //     });
+  //     return errors;
+  //   }),
 });
 
 const validateRendicionGastos = validator(schemaRendicionGastos);

@@ -7,14 +7,17 @@ export const RendicionGastos = sequelize.define('rendicionGastos', {
     primaryKey: true,
     autoIncrement: true,
   },
+  numeroRendicion: {
+    type: DataTypes.STRING,
+  },
   nombreApellido: {
     type: DataTypes.STRING,
   },
   proyecto: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
   },
   lugarComision: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
   },
   objetoComision: {
     type: DataTypes.STRING,
@@ -25,15 +28,15 @@ export const RendicionGastos = sequelize.define('rendicionGastos', {
   fechaFin: {
     type: DataTypes.STRING,
   },
-  recibido: {
-    type: DataTypes.STRING,
-  },
-  rendido: {
-    type: DataTypes.STRING,
-  },
-  saldo: {
-    type: DataTypes.STRING,
-  },
+  // recibido: {
+  //   type: DataTypes.STRING,
+  // },
+  // rendido: {
+  //   type: DataTypes.STRING,
+  // },
+  // saldo: {
+  //   type: DataTypes.STRING,
+  // },
   estado: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

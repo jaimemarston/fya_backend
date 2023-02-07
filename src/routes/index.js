@@ -3,6 +3,7 @@
 import solicitudRoutes from './solicitud.routes.js';
 import solicitudProductoRoutes from './solicitudProducto.routes.js';
 import rendicionGastos from './rendicionGastos.routes.js';
+import rendicionGastosProducto from './rendicionGastosProductos.routes.js';
 import registroActividad from './registroActividad.routes.js';
 import registroProyecto from './registroProyecto.routes.js';
 import registroCargo from './registroCargo.router.js';
@@ -20,4 +21,5 @@ export {
   solicitudRoutes,
   solicitudProductoRoutes,
   rendicionGastos,
+  rendicionGastosProducto,
 };

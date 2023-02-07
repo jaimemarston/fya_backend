@@ -39,7 +39,7 @@ const regProyectoAll = async (req = request, res = response) => {
 
 const regProyectoAdd = async (req = request, res = response) => {
   const { body } = req;
-  console.log(body);
+  // console.log(body);
   const { error } = validateRegistroProyecto(req.body);
   if (error) {
     const err = error.details[0].message;
@@ -74,19 +74,14 @@ const regProyectoAddAll = async (req = request, res = response) => {
       const { error } = validateRegistroProyecto(element);
 
       if (error) {
-        console.log('error =>', element);
-
         historial.push(element);
       } else {
         existCode = await RegistroProyecto.findOne({
           where: { codigo: element.codigo },
         });
         if (existCode) {
-          console.log('existe=>', element);
-
           historial.push(element);
         } else {
-          console.log('agregar =>', element);
           await RegistroProyecto.create({ ...element });
         }
       }
@@ -127,13 +122,13 @@ const regProyectoUpdate = async (req = request, res = response) => {
   const { body } = req;
   try {
     const registroProyecto = await RegistroProyecto.findByPk(id);
-    const existCode = await RegistroProyecto.findOne({
-      where: { codigo: body.codigo },
-    });
+    // const existCode = await RegistroProyecto.findOne({
+    //   where: { codigo: body.codigo },
+    // });
 
-    if (existCode) {
-      return res.status(404).json({ message: 'El código ya existe' });
-    }
+    // if (existCode) {
+    //   return res.status(404).json({ message: 'El código ya existe' });
+    // }
 
     if (!registroProyecto) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
@@ -150,7 +145,7 @@ const regProyectoUpdate = async (req = request, res = response) => {
 
     res.json({
       message: 'Proyecto actualizado',
-      lugar: { ...body },
+      proyecto: { ...body },
     });
   } catch (err) {
     console.log(err);

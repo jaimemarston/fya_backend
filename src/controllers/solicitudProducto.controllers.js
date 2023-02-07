@@ -4,6 +4,7 @@ import {
   RegistroProyecto,
   Solicitud,
   SolicitudProducto,
+  LugarComision,
 } from '../models/index.js';
 import { Op } from 'sequelize';
 
@@ -13,7 +14,9 @@ const solicitudProductoAll = async (req = request, res = response) => {
     SolicitudProducto.count(),
   ]);
 
-  res.status(200).json({ message: 'Lista de Productos', producto, count });
+  res
+    .status(200)
+    .json({ message: 'Lista de Productos', data: producto, count });
 };
 
 const solicitudProductoAdd = async (req = request, res = response) => {
