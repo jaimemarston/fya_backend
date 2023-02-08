@@ -1,8 +1,13 @@
 import { request, response } from 'express';
 import { validateRendicionGastos } from '../helpers/schemaRendicionGastos.js';
-import { RegistroProyecto, RendicionGastos } from '../models/index.js';
+import {
+  RegistroProyecto,
+  RendicionGastos,
+  RendicionGastosProducto,
+} from '../models/index.js';
 
 const rendGastosOne = async (req = request, res = response) => {
+  console.log('data');
   const { id } = req.params;
   try {
     const rendicionGastos = await RendicionGastos.findOne({
@@ -24,6 +29,7 @@ const rendGastosAll = async (req = request, res = response) => {
       RendicionGastos.findAll({
         order: ['id'],
         where: { estado: true },
+        include: RendicionGastosProducto,
       }),
       RendicionGastos.count({
         where: { estado: true },

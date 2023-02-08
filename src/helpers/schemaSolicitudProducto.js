@@ -3,38 +3,28 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const schemaSolicitudProducto = Joi.object({
-  descripcion: Joi.number()
+  descripcion: Joi.string()
     .required()
-    .positive()
-    .integer()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
-          data.message = 'La descripción es requerido';
+          data.message = 'El nombres es requerido';
         }
-        if (data.code === 'number.base') {
-          data.message = 'Solo se permiten números';
-        }
-        if (data.code === 'number.positive') {
-          data.message = 'Ingrese números positivos';
+        if (data.code === 'string.empty') {
+          data.message = 'El nombres no debe estar vació';
         }
       });
       return errors;
     }),
-  partidaPresupuestal: Joi.number()
+  partidaPresupuestal: Joi.string()
     .required()
-    .positive()
-    .integer()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
-          data.message = 'La partida presupuestal es requerido';
+          data.message = 'El nombres es requerido';
         }
-        if (data.code === 'number.base') {
-          data.message = 'Solo se permiten números';
-        }
-        if (data.code === 'number.positive') {
-          data.message = 'Ingrese números positivos';
+        if (data.code === 'string.empty') {
+          data.message = 'El nombres no debe estar vació';
         }
       });
       return errors;

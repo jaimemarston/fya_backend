@@ -21,8 +21,8 @@ const solicitudProductoAll = async (req = request, res = response) => {
 
 const solicitudProductoAdd = async (req = request, res = response) => {
   const { body } = req;
-  const { solicitudId, partidaPresupuestal } = body;
-  console.log(body);
+  // const { solicitudId, partidaPresupuestal } = body;
+
   const { error } = validateSolicitudProductoSchema(req.body);
   if (error) {
     const err = error.details[0].message;
@@ -30,23 +30,23 @@ const solicitudProductoAdd = async (req = request, res = response) => {
   }
 
   try {
-    const resultId = await Solicitud.findOne({
-      where: {
-        [Op.and]: [{ id: solicitudId }, { estado: true }],
-      },
-    });
+    // const resultId = await Solicitud.findOne({
+    //   where: {
+    //     [Op.and]: [{ id: solicitudId }, { estado: true }],
+    //   },
+    // });
 
-    const exitsProyecto = await RegistroProyecto.findOne({
-      where: { id: partidaPresupuestal },
-    });
-    // console.log('exitsProyecto =>', exitsProyecto);
-    if (!exitsProyecto) {
-      return res.status(404).json({ message: 'No existe el proyecto' });
-    }
+    // const exitsProyecto = await RegistroProyecto.findOne({
+    //   where: { id: partidaPresupuestal },
+    // });
 
-    if (!resultId) {
-      return res.status(400).json({ message: 'No existe el usuario' });
-    }
+    // if (!exitsProyecto) {
+    //   return res.status(404).json({ message: 'No existe el proyecto' });
+    // }
+
+    // if (!resultId) {
+    //   return res.status(400).json({ message: 'No existe el usuario' });
+    // }
 
     const producto = await SolicitudProducto.create({ ...body });
 
@@ -62,14 +62,15 @@ const solicitudProductoAdd = async (req = request, res = response) => {
 const solicitudProductoDelete = async (req = request, res = response) => {
   const { id } = req.params;
   const producto = await SolicitudProducto.findByPk(id);
-
-  if (!producto) {
-    return res.status(404).json({ message: 'No existe el producto' });
+  try {
+    if (!producto) {
+      return res.status(404).json({ message: 'No existe el producto' });
+    }
+    await SolicitudProducto.destroy({ where: { id } });
+    res.json({ message: 'Producto eliminado', producto });
+  } catch (error) {
+    res.json({ message: 'Hable con el administrador', error });
   }
-
-  // await SolicitudProducto.update({ estado: false });
-  await SolicitudProducto.destroy({ where: { id } });
-  res.json({ message: 'Producto eliminado', producto });
 };
 
 export { solicitudProductoAll, solicitudProductoAdd, solicitudProductoDelete };

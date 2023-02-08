@@ -2,17 +2,17 @@ import Joi from 'joi';
 const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
-const schemaSolicitudProducto = Joi.object({
+const schemaRendicionGastosProducto = Joi.object({
   fecha: Joi.string()
     .required()
     .error((errors) => {
       errors.forEach((data) => {
         errors.forEach((data) => {
           if (data.code === 'any.required') {
-            data.message = 'El itinerario de transporte es requerido';
+            data.message = 'La fecha es requerido';
           }
           if (data.code === 'string.empty') {
-            data.message = 'El itinerario de transporte no debe estar vació';
+            data.message = 'La fecha es no debe estar vació';
           }
         });
       });
@@ -33,8 +33,10 @@ const schemaSolicitudProducto = Joi.object({
       });
       return errors;
     }),
-  numero: Joi.string()
+  numero: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
@@ -43,11 +45,34 @@ const schemaSolicitudProducto = Joi.object({
         if (data.code === 'string.empty') {
           data.message = 'El numero no debe estar vació';
         }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
+        }
       });
       return errors;
     }),
-  tipo: Joi.string()
+  rendicionGastosId: Joi.number()
     .required()
+    .positive()
+    .integer()
+    .error((errors) => {
+      errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El id es requerido';
+        }
+        if (data.code === 'string.empty') {
+          data.message = 'El id no debe estar vació';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
+        }
+      });
+      return errors;
+    }),
+  tipo: Joi.number()
+    .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
@@ -56,11 +81,16 @@ const schemaSolicitudProducto = Joi.object({
         if (data.code === 'string.empty') {
           data.message = 'El tipo no debe estar vació';
         }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
+        }
       });
       return errors;
     }),
-  ruc: Joi.string()
+  ruc: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'any.required') {
@@ -68,6 +98,9 @@ const schemaSolicitudProducto = Joi.object({
         }
         if (data.code === 'string.empty') {
           data.message = 'El RUC no debe estar vació';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
@@ -100,16 +133,24 @@ const schemaSolicitudProducto = Joi.object({
     }),
   importe: Joi.number()
     .required()
+    .positive()
+    .integer()
     .error((errors) => {
       errors.forEach((data) => {
-        if (data.code === 'number.base') {
-          console.log('=>', (data.message = 'Debe ingresar números'));
+        if (data.code === 'any.required') {
+          data.message = 'El importe es requerido';
+        }
+        if (data.code === 'string.empty') {
+          data.message = 'El importe no debe estar vació';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
         }
       });
       return errors;
     }),
 });
 
-const validateSolicitudProductoSchema = validator(schemaSolicitudProducto);
+const validateRendicionProductSchema = validator(schemaRendicionGastosProducto);
 
-export { validateSolicitudProductoSchema };
+export { validateRendicionProductSchema };
