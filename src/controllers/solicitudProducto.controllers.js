@@ -21,7 +21,7 @@ const solicitudProductoAll = async (req = request, res = response) => {
 
 const solicitudProductoAdd = async (req = request, res = response) => {
   const { body } = req;
-  // const { solicitudId, partidaPresupuestal } = body;
+  const { solicitudId } = body;
 
   const { error } = validateSolicitudProductoSchema(req.body);
   if (error) {
@@ -30,11 +30,11 @@ const solicitudProductoAdd = async (req = request, res = response) => {
   }
 
   try {
-    // const resultId = await Solicitud.findOne({
-    //   where: {
-    //     [Op.and]: [{ id: solicitudId }, { estado: true }],
-    //   },
-    // });
+    const resultId = await Solicitud.findOne({
+      where: {
+        [Op.and]: [{ id: solicitudId }, { estado: true }],
+      },
+    });
 
     // const exitsProyecto = await RegistroProyecto.findOne({
     //   where: { id: partidaPresupuestal },
@@ -44,9 +44,9 @@ const solicitudProductoAdd = async (req = request, res = response) => {
     //   return res.status(404).json({ message: 'No existe el proyecto' });
     // }
 
-    // if (!resultId) {
-    //   return res.status(400).json({ message: 'No existe el usuario' });
-    // }
+    if (!resultId) {
+      return res.status(400).json({ message: 'No existe el usuario' });
+    }
 
     const producto = await SolicitudProducto.create({ ...body });
 
@@ -54,8 +54,8 @@ const solicitudProductoAdd = async (req = request, res = response) => {
       .status(201)
       .json({ message: 'El producto ha sido creado con éxito', producto });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({ message: 'hable con el administrador' });
+    console.log('error', error);
+    res.status(400).json({ message: 'hable con el administrador', error });
   }
 };
 
