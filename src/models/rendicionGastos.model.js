@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
+import { RendicionGastosProducto } from './rendicionGastosProducto.model.js';
 
 export const RendicionGastos = sequelize.define('rendicionGastos', {
   id: {
@@ -41,4 +42,9 @@ export const RendicionGastos = sequelize.define('rendicionGastos', {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
   },
+});
+
+RendicionGastos.hasMany(RendicionGastosProducto, {
+  foreignKey: 'rendicionGastosId',
+  sourceKey: 'id',
 });
