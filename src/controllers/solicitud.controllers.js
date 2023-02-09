@@ -7,29 +7,22 @@ import {
 } from '../models/index.js';
 
 const solicitudAll = async (req = request, res = response) => {
-  const [datos, count] = await Promise.all([
-    Solicitud.findAll({
-      order: ['id'],
-      where: { estado: true },
-      include: SolicitudProducto,
-    }),
-    Solicitud.count({ where: { estado: true } }),
-  ]);
-  // const personal = datos.map(async (item, index) => {
-  //   let variable = index + 1;
-  //   const exitsProyecto = await RegistroProyecto.findOne({
-  //     where: { id: item.nombreProyecto },
-  //   });
-  //   item.nombreProyecto = exitsProyecto.dataValues.nombreAbreviado;
-  //   if (datos.length === variable) {
-  //     return item;
-  //   }
-  //   console.log(item);
-  // });
+  try {
+    const [datos, count] = await Promise.all([
+      Solicitud.findAll({
+        order: ['id'],
+        where: { estado: true },
+        include: SolicitudProducto,
+      }),
+      Solicitud.count({ where: { estado: true } }),
+    ]);
 
-  res
-    .status(200)
-    .json({ message: 'Lista de usuarios', personal: datos, count });
+    res
+      .status(200)
+      .json({ message: 'Lista de usuarios', personal: datos, count });
+  } catch (error) {
+    res.status(400).json({ message: 'Hable con el administrador', error });
+  }
 };
 
 const solicitudOne = async (req = request, res = response) => {
