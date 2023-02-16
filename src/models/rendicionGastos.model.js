@@ -29,9 +29,9 @@ export const RendicionGastos = sequelize.define('rendicionGastos', {
   fechaFin: {
     type: DataTypes.STRING,
   },
-  // recibido: {
-  //   type: DataTypes.STRING,
-  // },
+  recibido: {
+    type: DataTypes.STRING,
+  },
   // rendido: {
   //   type: DataTypes.STRING,
   // },

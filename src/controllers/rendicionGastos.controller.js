@@ -7,18 +7,35 @@ import {
 } from '../models/index.js';
 
 const rendGastosOne = async (req = request, res = response) => {
-  console.log('data');
   const { id } = req.params;
+  const [rendGastosProducts, producto] = await Promise.all([
+    RendicionGastos.findByPk(id),
+    RendicionGastosProducto.findAll({
+      where: { rendicionGastosId: id },
+    }),
+  ]);
   try {
-    const rendicionGastos = await RendicionGastos.findOne({
-      where: { id, estado: true },
-    });
-
-    if (!rendicionGastos) {
+    if (!rendGastosProducts) {
       return res.status(404).json({ message: 'Id no encontrado' });
     }
-    res.status(200).json({ message: 'Rendición encontrado', rendicionGastos });
+    const { dataValues } = {
+      ...rendGastosProducts,
+    };
+
+    dataValues.productos = producto;
+    const suma = producto
+      .map((item) => {
+        let variable = Number(item.importe);
+        return variable;
+      })
+      .reduce((prev, curr) => prev + curr, 0);
+    res.status(200).json({
+      message: 'Rendición encontrado',
+      rendGastosProducts: dataValues,
+      total: suma,
+    });
   } catch (err) {
+    console.log(err);
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
@@ -85,6 +102,7 @@ const rendGastosAdd = async (req = request, res = response) => {
     if (!exitsProyecto) {
       return res.status(404).json({ message: 'No existe el proyecto' });
     }
+
     const rendicionGastos = await RendicionGastos.create({ ...body });
 
     res
