@@ -102,6 +102,7 @@ const rendGastosAdd = async (req = request, res = response) => {
     if (!exitsProyecto) {
       return res.status(404).json({ message: 'No existe el proyecto' });
     }
+
     const rendicionGastos = await RendicionGastos.create({ ...body });
 
     res

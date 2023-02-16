@@ -97,24 +97,19 @@ const schemaRendicionGastos = Joi.object({
       return errors;
     }),
 
-  // recibido: Joi.number()
-  //   .required()
-  //   .positive()
-  //   .integer()
-  //   .error((errors) => {
-  //     errors.forEach((data) => {
-  //       if (data.code === 'any.required') {
-  //         data.message = 'El recibido es requerido';
-  //       }
-  //       if (data.code === 'number.base') {
-  //         data.message = 'Solo se permiten números';
-  //       }
-  //       if (data.code === 'number.positive') {
-  //         data.message = 'Ingrese números positivos';
-  //       }
-  //     });
-  //     return errors;
-  //   }),
+  recibido: Joi.string()
+    .required()
+    .error((errors) => {
+      errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El recibido es requerido';
+        }
+        if (data.code === 'string.empty') {
+          data.message = 'El recibido no debe estar vació';
+        }
+      });
+      return errors;
+    }),
   // rendido: Joi.number()
   //   .required()
   //   .positive()
