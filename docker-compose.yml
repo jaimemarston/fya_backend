@@ -17,7 +17,7 @@ services:
         window: 120s
     restart: always
     ports:
-      - '8002:3001'
+      - '8002:3000'
   db:
     image: postgres
     restart: unless-stopped
