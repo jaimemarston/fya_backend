@@ -3,7 +3,7 @@ version: '3.5'
 services:
   postgresDB:
     image: postgres
-    restart: always
+    restart: unless-stopped
     container_name: container_postgres
     env_file:
       - .env
@@ -16,9 +16,16 @@ services:
       - ./sql:/var/lib/postgresql/data
     ports:
       - '5432:${POSTGRES_PORT}'
-    networks:
-      - postgresDB
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8090:8080
 
 networks:
   postgresDB:
-    driver: bridge
+  adminer:
+
+volumes:
+  postgresDB:
