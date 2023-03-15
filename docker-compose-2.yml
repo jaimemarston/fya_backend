@@ -1,24 +1,11 @@
-version: "3.3"
+version: '3.5'
 
 services:
   app:
     build: .
     volumes:
-      - './:/app'
-    image: app
-    networks:
-      - default
-    deploy:
-      replicas: 1
-      mode: replicated
-      restart_policy:
-        condition: on-failure
-        delay: 20s
-        window: 120s
-    restart: always
-    ports:
-      - '8002:3001'
-  db:
+      - ./:/app
+  postgresDB:
     image: postgres
     restart: unless-stopped
     container_name: container_postgres
@@ -39,5 +26,10 @@ services:
     restart: unless-stopped
     ports:
       - 8090:8080
+
+networks:
+  postgresDB:
+  adminer:
+
 volumes:
   postgresDB:
