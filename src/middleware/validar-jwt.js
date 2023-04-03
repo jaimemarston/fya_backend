@@ -2,7 +2,9 @@ import jwt from 'jsonwebtoken';
 import { Usuario } from '../models/user.model.js';
 
 const validarJWT = async (req, res, next) => {
-  const token = req.header('Authorization');
+  const token = req.headers['authorization'].split(' ')[1];
+
+
 
   if (!token) {
     return res.status(401).json({ message: 'No hay token en la petición' });

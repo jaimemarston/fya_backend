@@ -13,6 +13,8 @@ import {
   rendicionGastosProducto,
   solicitudProductoRoutes,
   solicitudRoutes,
+  userRoutes,
+  authLogin
 } from '../routes/index.js';
 
 class Server {
@@ -26,7 +28,7 @@ class Server {
 
   connection = async () => {
     try {
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ force: false });
       await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
     } catch (error) {
@@ -55,7 +57,7 @@ class Server {
   }
 
   routes() {
-    // this.app.use('/api', authLogin);
+    this.app.use('/api', authLogin);
     this.app.use('/api', solicitudRoutes);
     this.app.use('/api', solicitudProductoRoutes);
     this.app.use('/api', rendicionGastos);
@@ -65,6 +67,7 @@ class Server {
     this.app.use('/api', registroCargo);
     this.app.use('/api', registroDocumento);
     this.app.use('/api', lugarComision);
+    this.app.use('/api', userRoutes);
   }
 
   listen() {

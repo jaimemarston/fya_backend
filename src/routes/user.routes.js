@@ -7,11 +7,11 @@ import {
   userOne,
   userUpdate,
 } from '../controllers/user.controllers.js';
-// import { validarJWT, haveRol } from '../middleware/index.js';
+ import { validarJWT, haveRol } from '../middleware/index.js';
 
 const router = Router();
 
-router.get('/usuario', userAll);
+router.get('/usuario', validarJWT, userAll);
 
 router.get('/usuario/:id', userOne);
 
