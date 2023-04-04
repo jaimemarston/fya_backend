@@ -67,7 +67,7 @@ class Server {
     this.app.use('/api', registroCargo);
     this.app.use('/api', registroDocumento);
     this.app.use('/api', lugarComision);
-    this.app.use('/api', userRoutes);
+    this.app.use('/api', userRoutes); 
   }
 
   listen() {
