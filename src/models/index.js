@@ -11,4 +11,4 @@ export { RegistroCargo } from './registroCargo.model.js';
 export { RegistroDocumento } from './registroDocumento.model.js';
 export { LugarComision } from './lugarComision.model.js';
 
-// export { Usuario } from './user.model.js';
+export { Usuario } from './user.model.js';

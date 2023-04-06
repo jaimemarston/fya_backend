@@ -7,7 +7,7 @@ const login = async (req, res) => {
   const { password } = req.body;
 
   try {
-    const usuario = await Usuario.findOne({
+    let usuario = await Usuario.findOne({
       where: { email: body.email },
     });
 
@@ -28,7 +28,12 @@ const login = async (req, res) => {
         .json({ message: 'Las contraseñas no son correctas' });
     }
     // console.log(usuario.id);
-    const token = await generateJWT(usuario);
+
+    usuario.password = null
+   
+    const user = {id: usuario.id}
+    
+    const token = await generateJWT(user);
 
     res.status(200).json({ usuario, token });
   } catch (error) {

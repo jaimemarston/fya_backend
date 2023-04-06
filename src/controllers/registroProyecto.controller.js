@@ -36,7 +36,7 @@ const regProyectoAll = async (req = request, res = response) => {
 
     res
       .status(200)
-      .json({ message: 'Lista de proyectos', registroProyecto, count });
+      .json({ message: 'Lista de proyectos', registroProyecto: registroProyecto || [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
