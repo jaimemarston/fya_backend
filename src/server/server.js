@@ -24,7 +24,7 @@ class Server {
     this.connection();
     this.middleware();
     this.routes();
-  }
+  } 
 
   connection = async () => {
     try {

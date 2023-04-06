@@ -9,6 +9,7 @@ export const RegistroProyecto = sequelize.define('registroProyecto', {
   },
   codigo: {
     type: DataTypes.STRING,
+    primaryKey: true,
   },
   nombreAbreviado: {
     type: DataTypes.STRING,
@@ -19,5 +20,5 @@ export const RegistroProyecto = sequelize.define('registroProyecto', {
   estado: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
-  },
+  }
 });
