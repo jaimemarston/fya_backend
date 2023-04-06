@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
 
-export const registroCodigoReferencia = sequelize.define(
+export const RegistroCodigoReferencia = sequelize.define(
   'registroCodigoReferencia',
   {
     id: {

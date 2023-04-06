@@ -65,56 +65,21 @@ const regProyectoAdd = async (req = request, res = response) => {
 };
 
 const regProyectoAddAll = async (req = request, res = response) => {
-  const { body } = req;
+try {
+  console.log(req.file.path)
 
-  let historial = [];
-  let existCode;
-  try {
-    body.forEach(async (element, index) => {
-      const { error } = validateRegistroProyecto(element);
-
-      if (error) {
-        historial.push(element);
-      } else {
-        existCode = await RegistroProyecto.findOne({
-          where: { codigo: element.codigo },
-        });
-        if (existCode) {
-          historial.push(element);
-        } else {
-          await RegistroProyecto.create({ ...element });
-        }
-      }
-
-      if (body.length - 1 === index) {
-        const unicos = [...new Set(historial)];
-        let respuesta = '';
-
-        if (error) {
-          respuesta = 'Hubo un error, revise el documento';
-          res.status(400).json({
-            error: `${respuesta} `,
-            historial: unicos,
-          });
-        } else if (existCode) {
-          respuesta = 'Hay datos repetidos, revise datos del documento';
-          res.status(400).json({
-            repeat: `${respuesta} `,
-            historial: unicos,
-          });
-        } else {
-          let respuesta = 'Se han creado con éxito';
-          res.status(201).json({
-            message: `${respuesta} `,
-            historial: unicos,
-          });
-        }
-      }
+    const response = await projectService.importProjects(req.file.path);
+    return res.status(HttpStatus.CREATED).json({
+      response
     });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: 'hable con el administrador', err });
-  }
+} catch (error) {
+  console.error("ERROR IN regProyectoAddAll",error);
+  fs.unlinkSync(req.file.path);
+
+  return res.status(HttpStatus.BAD_REQUEST).json({
+    error
+  });
+}
 };
 
 const regProyectoUpdate = async (req = request, res = response) => {
