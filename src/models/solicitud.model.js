@@ -33,6 +33,9 @@ export const Solicitud = sequelize.define('solicitudes', {
   fechaInicio: {
     type: DataTypes.STRING,
   },
+  user_id: {
+    type: DataTypes.INTEGER,
+  },
   fechaFin: {
     type: DataTypes.STRING,
   },

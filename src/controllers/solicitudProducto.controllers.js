@@ -23,11 +23,11 @@ const solicitudProductoAdd = async (req = request, res = response) => {
   const { body } = req;
   const { solicitudId } = body;
 
-  const { error } = validateSolicitudProductoSchema(req.body);
-  if (error) {
+  /*   const { error } = validateSolicitudProductoSchema(req.body); */
+/*   if (error) {
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
-  }
+  } */
 
   try {
     const resultId = await Solicitud.findOne({
