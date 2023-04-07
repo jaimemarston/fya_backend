@@ -17,11 +17,14 @@ const userOne = async (req = request, res = response) => {
   const { id } = req.params;
   const usuario = await Usuario.findOne({
     where: { id },
+    attributes: { exclude: ['password'] },
   });
 
   if (!usuario) {
     return res.status(404).json({ message: 'No existe el usuario' });
   }
+
+  
 
   res.status(200).json({ message: 'Usuario encontrado', usuario });
 };
@@ -48,6 +51,8 @@ const userAdd = async (req = request, res = response) => {
     body.password = bcryptjs.hashSync(body.password, salt);
 
     const usuario = await Usuario.create({ ...body });
+
+
 
     res.status(201).json({ message: 'Usuario creado con éxito', usuario });
   } catch (error) {

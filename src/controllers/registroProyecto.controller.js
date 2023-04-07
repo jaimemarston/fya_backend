@@ -1,6 +1,9 @@
 import { request, response } from 'express';
 import { validateRegistroProyecto } from '../helpers/schemaRegistroProyecto.js';
-import { RegistroProyecto } from '../models/index.js';
+import { RegistroProyecto } from "../models/index.js";
+import { HttpStatus } from '../utils/status.utils.js';
+import projectService from '../services/project.service.js';
+import fs from "fs";
 
 const regProyectoOne = async (req = request, res = response) => {
   const { id } = req.params;
@@ -20,18 +23,20 @@ const regProyectoOne = async (req = request, res = response) => {
 
 const regProyectoAll = async (req = request, res = response) => {
   try {
-    const [registroProyecto, count] = await Promise.all([
-      RegistroProyecto.findAll({
-        order: ['id'],
-        where: { estado: true },
-      }),
-      RegistroProyecto.count({
-        where: { estado: true },
-      }),
-    ]);
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+    console.log(req.query)
+    const { rows:registroProyecto, count } = await RegistroProyecto.findAndCountAll({
+      where: { estado: true },
+      limit: pageSize,
+      offset,
+      order: [['id', 'ASC']]
+    });
+
     res
       .status(200)
-      .json({ message: 'Lista de proyectos', registroProyecto, count });
+      .json({ message: 'Lista de proyectos', registroProyecto: registroProyecto || [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }

@@ -18,7 +18,7 @@ const validarRoles = (req = request, res = response, next) => {
 };
 // TODO para validar un roles es especifico
 const haveRol = (...roles) => {
-  return (req = request, res = response) => {
+  return (req = request, res = response, next) => {
     if (!req.usuario) {
       return res.status(500).json({
         msg: 'Se quiere verificar el role sin validar el token primero',
