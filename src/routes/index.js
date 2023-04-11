@@ -9,8 +9,7 @@ import registroProyecto from './registroProyecto.routes.js';
 import registroCargo from './registroCargo.router.js';
 import registroDocumento from './registroDocumento.routes.js';
 import lugarComision from './lugarComision.routes.js';
-import user from "./user.routes.js";
-
+import registroCodigosReferencia from "./registroCodigosReferencia.routes.js";
 export {
      userRoutes,
    authLogin,
@@ -23,5 +22,5 @@ export {
   solicitudProductoRoutes,
   rendicionGastos,
   rendicionGastosProducto,
-  
+  registroCodigosReferencia
 };

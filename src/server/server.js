@@ -7,6 +7,7 @@ import {
   lugarComision,
   registroActividad,
   registroCargo,
+  registroCodigosReferencia,
   registroDocumento,
   registroProyecto,
   rendicionGastos,
@@ -28,7 +29,7 @@ class Server {
 
   connection = async () => {
     try {
-      await sequelize.sync({ force: false });
+      await sequelize.sync({ force: true });
       await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
     } catch (error) {
@@ -67,6 +68,7 @@ class Server {
     this.app.use('/api', registroCargo);
     this.app.use('/api', registroDocumento);
     this.app.use('/api', lugarComision);
+    this.app.use('/api', registroCodigosReferencia);
     this.app.use('/api', userRoutes); 
   }
 
