@@ -9,18 +9,20 @@ import registroProyecto from './registroProyecto.routes.js';
 import registroCargo from './registroCargo.router.js';
 import registroDocumento from './registroDocumento.routes.js';
 import lugarComision from './lugarComision.routes.js';
+import registroEmpleado from './registroEmpleado.routes.js';
 import user from "./user.routes.js";
 
 export {
-     userRoutes,
+  solicitudRoutes,
+  registroEmpleado,
+  solicitudProductoRoutes,
+    userRoutes,
    authLogin,
   registroActividad,
   lugarComision,
   registroDocumento,
   registroProyecto,
   registroCargo,
-  solicitudRoutes,
-  solicitudProductoRoutes,
   rendicionGastos,
   rendicionGastosProducto,
   

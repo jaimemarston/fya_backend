@@ -10,19 +10,25 @@ export const registroEmpleado = sequelize.define('registroEmpleado', {
   nombre: {
     type: DataTypes.STRING,
   },
-  apellido: {
+
+  codigo: {
+    type: DataTypes.STRING,
+  },
+
+  docIdentidad: {
+    type: DataTypes.STRING,
+  },
+  phone: {
+    type: DataTypes.STRING,
+  },
+  cargo: {
     type: DataTypes.STRING,
   },
   email: {
     type: DataTypes.STRING,
     unique: true,
   },
-  password: {
-    type: DataTypes.STRING,
-  },
-  image: {
-    type: DataTypes.STRING,
-  },
+
   rol: {
     type: DataTypes.STRING,
   },

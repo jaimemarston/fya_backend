@@ -4,6 +4,8 @@ import winston from 'winston';
 import expressWinston from 'express-winston';
 import { sequelize } from '../database/db.js';
 import {
+  solicitudProductoRoutes,
+  solicitudRoutes,
   lugarComision,
   registroActividad,
   registroCargo,
@@ -11,10 +13,10 @@ import {
   registroProyecto,
   rendicionGastos,
   rendicionGastosProducto,
-  solicitudProductoRoutes,
-  solicitudRoutes,
   userRoutes,
-  authLogin
+  authLogin,
+  registroEmpleado
+
 } from '../routes/index.js';
 
 class Server {
@@ -28,7 +30,7 @@ class Server {
 
   connection = async () => {
     try {
-      await sequelize.sync({ force: false });
+      await sequelize.sync({ force: true });
       await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
     } catch (error) {
@@ -58,6 +60,7 @@ class Server {
 
   routes() {
     this.app.use('/api', authLogin);
+    this.app.use('/api', registroEmpleado);
     this.app.use('/api', solicitudRoutes);
     this.app.use('/api', solicitudProductoRoutes);
     this.app.use('/api', rendicionGastos);
