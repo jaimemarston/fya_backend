@@ -1,6 +1,7 @@
 import { request, response } from 'express';
 import {  RegistroCodigoReferencia } from '../models/index.js';
 import { HttpStatus } from '../utils/status.utils.js';
+import codeReferencesService from '../services/codeReferences.service.js';
 
 
 const referenciaAll = async (req = request, res = response) => {
@@ -10,7 +11,7 @@ const referenciaAll = async (req = request, res = response) => {
     const offset = (page - 1) * pageSize;
 
     const { rows: codigoReferencias, count } = await RegistroCodigoReferencia.findAndCountAll({
-      where: { estado: true },
+      /* where: { estado: true }, */
       limit: pageSize,
       offset,
       order: [['id', 'ASC']]
@@ -24,10 +25,10 @@ const referenciaAll = async (req = request, res = response) => {
   }
 };
 
-/* 
+
 const referenciaAddAll = async (req = request, res = response) => {
   try {
-    const response = await codeReferenceService.importCodeReferences(req.file.path);
+    const response = await codeReferencesService.importCodeReferences(req.file.path);
     return res.status(HttpStatus.CREATED).json({
       response
     });
@@ -40,10 +41,10 @@ const referenciaAddAll = async (req = request, res = response) => {
     });
   }
 };
- */
+
 
 
 export {
   referenciaAll,
- /*  referenciaAddAll */
+  referenciaAddAll
 };
