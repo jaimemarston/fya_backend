@@ -45,12 +45,12 @@ export const Solicitud = sequelize.define('solicitudes', {
   },
 });
 
-/* Solicitud.hasMany(SolicitudProducto, {
+ Solicitud.hasMany(SolicitudProducto, {
   foreignKey: 'solicitudId',
   sourceKey: 'id',
 });
 
-
+/*
 Solicitud.hasMany(RegistroProyecto); */
 
 

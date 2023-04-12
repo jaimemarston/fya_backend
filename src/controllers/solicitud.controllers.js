@@ -54,6 +54,8 @@ const solicitudOne = async (req = request, res = response) => {
     }),
   ]);
 
+  console.log(personal)
+
   if (!personal) {
     return res.status(404).json({ message: 'No existe el personal' });
   }
@@ -79,11 +81,11 @@ const solicitudOne = async (req = request, res = response) => {
 const solicitudAdd = async (req = request, res = response) => {
   const { body } = req;
   const { nombreProyecto } = body;
-  const { error } = validateSolicitud(req.body);
-  if (error) {
+ /*  const { error } = validateSolicitud(req.body); */
+/*   if (error) {
     const err = error.details[0].message;
     return res.status(400).json({ message: err, error: 'Error al digitar' });
-  }
+  } */
 
   try {
     const lista = await Solicitud.findAll({
