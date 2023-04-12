@@ -31,7 +31,7 @@ class Server {
 
   connection = async () => {
     try {
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ force: false });
       await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
     } catch (error) {
