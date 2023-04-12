@@ -7,6 +7,11 @@ export const Usuario = sequelize.define('usuarios', {
     primaryKey: true,
     autoIncrement: true,
   },
+
+  codigo: {
+    type: DataTypes.STRING,
+
+  },
   nombre: {
     type: DataTypes.STRING,
   },
@@ -24,7 +29,7 @@ export const Usuario = sequelize.define('usuarios', {
     type: DataTypes.STRING,
   },
   rol: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM(["ADMIN_ROLE", "USER_ROLE"]),
   },
   estado: {
     type: DataTypes.BOOLEAN,

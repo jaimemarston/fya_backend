@@ -3,22 +3,32 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const schemaUser = Joi.object({
+  codigo: Joi.string()
+  .required()
+  .error((errors) => {
+    errors.forEach((data) => {
+      if (data.code === 'string.empty') {
+        console.log('=>', (data.message = 'El codigo no debe estar vació'));
+      }
+    });
+    return errors;
+  }),
+  estado: Joi.boolean()
+  .required()
+  .error((errors) => {
+    errors.forEach((data) => {
+      if (data.code === 'string.empty') {
+        console.log('=>', (data.message = 'El estado no debe estar vació'));
+      }
+    });
+    return errors;
+  }),
   nombre: Joi.string()
     .required()
     .error((errors) => {
       errors.forEach((data) => {
         if (data.code === 'string.empty') {
           console.log('=>', (data.message = 'El nombre no debe estar vació'));
-        }
-      });
-      return errors;
-    }),
-  apellido: Joi.string()
-    .required()
-    .error((errors) => {
-      errors.forEach((data) => {
-        if (data.code === 'string.empty') {
-          console.log('=>', (data.message = 'El apellido no debe estar vació'));
         }
       });
       return errors;
