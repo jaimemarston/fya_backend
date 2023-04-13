@@ -111,6 +111,24 @@ const schemaSolicitud = Joi.object({
       });
       return errors;
     }),
+    user_id: Joi.number()
+    .required()
+    .positive()
+    .integer()
+    .error((errors) => {
+      errors.forEach((data) => {
+        if (data.code === 'any.required') {
+          data.message = 'El user_ides requerido';
+        }
+        if (data.code === 'number.base') {
+          data.message = 'Solo se permiten números';
+        }
+        if (data.code === 'number.positive') {
+          data.message = 'Ingrese números positivos';
+        }
+      });
+      return errors;
+    }),
   fechaFin: Joi.string()
     .required()
     .error((errors) => {

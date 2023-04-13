@@ -10,9 +10,42 @@ export const RegistroDocumento = sequelize.define('registroDocumento', {
   codigo: {
     type: DataTypes.STRING,
   },
-  tipoDocumento: {
+  nombredoc: {
     type: DataTypes.STRING,
   },
+  ndocumento: {
+    type: DataTypes.STRING,
+  },
+nomfile: {
+    type: DataTypes.STRING,
+  },
+  codemp: {
+    type: DataTypes.STRING,
+  },
+  anio: {
+    type: DataTypes.STRING,
+  },
+  mes: {
+    type: DataTypes.STRING,
+  },
+  numerodoc: {
+    type: DataTypes.STRING,
+  },
+  tipodoc: {
+    type: DataTypes.STRING,
+  },
+
+  fechafirma: {
+    type: DataTypes.STRING,
+  },
+  fechaenvio: {
+    type: DataTypes.STRING,
+  },
+  
+  fechadoc: {
+    type: DataTypes.STRING,
+  },
+  
   estado: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,

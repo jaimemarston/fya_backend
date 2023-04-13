@@ -44,7 +44,8 @@ export const RendicionGastos = sequelize.define('rendicionGastos', {
   },
 });
 
-RendicionGastos.hasMany(RendicionGastosProducto, {
+/* RendicionGastos.hasMany(RendicionGastosProducto, {
   foreignKey: 'rendicionGastosId',
   sourceKey: 'id',
 });
+ */

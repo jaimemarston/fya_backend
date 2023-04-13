@@ -25,6 +25,26 @@ const solicitudAll = async (req = request, res = response) => {
   }
 };
 
+const solicitudAllUser = async (req = request, res = response) => {
+  const { id } = req.params;
+  try {
+    const [datos, count] = await Promise.all([
+      Solicitud.findAll({
+        order: ['id'],
+        where: { estado: true, user_id: id },
+        include: SolicitudProducto,
+      }),
+      Solicitud.count({ where: { estado: true } }),
+    ]);
+
+    res
+      .status(200)
+      .json({ message: 'Lista de usuarios', personal: datos, count });
+  } catch (error) {
+    res.status(400).json({ message: 'Hable con el administrador', error });
+  }
+};
+
 const solicitudOne = async (req = request, res = response) => {
   const { id } = req.params;
   const [personal, producto] = await Promise.all([
@@ -33,6 +53,8 @@ const solicitudOne = async (req = request, res = response) => {
       where: { solicitudId: id },
     }),
   ]);
+
+  console.log(personal)
 
   if (!personal) {
     return res.status(404).json({ message: 'No existe el personal' });
@@ -59,11 +81,11 @@ const solicitudOne = async (req = request, res = response) => {
 const solicitudAdd = async (req = request, res = response) => {
   const { body } = req;
   const { nombreProyecto } = body;
-  const { error } = validateSolicitud(req.body);
-  if (error) {
+ /*  const { error } = validateSolicitud(req.body); */
+/*   if (error) {
     const err = error.details[0].message;
     return res.status(400).json({ message: err, error: 'Error al digitar' });
-  }
+  } */
 
   try {
     const lista = await Solicitud.findAll({
@@ -159,4 +181,5 @@ export {
   solicitudAdd,
   solicitudUpdate,
   solicitudDelete,
+  solicitudAllUser
 };
