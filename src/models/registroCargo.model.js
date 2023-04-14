@@ -9,6 +9,7 @@ export const RegistroCargo = sequelize.define('registroCargo', {
   },
   codigo: {
     type: DataTypes.STRING,
+    primaryKey: true,
   },
   descripcion: {
     type: DataTypes.STRING,

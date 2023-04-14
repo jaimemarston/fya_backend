@@ -1,6 +1,9 @@
 import { request, response } from 'express';
 import { validateRegistroCargo } from '../helpers/schemaRegistroCargo.js';
 import { RegistroCargo } from '../models/index.js';
+import cargoService from '../services/cargos.service.js';
+import { HttpStatus } from '../utils/status.utils.js';
+import fs from "fs";
 
 const cargoOne = async (req = request, res = response) => {
   const { id } = req.params;
@@ -24,18 +27,19 @@ const cargoOne = async (req = request, res = response) => {
 
 const cargoAll = async (req = request, res = response) => {
   try {
-    const [registroCargo, count] = await Promise.all([
-      RegistroCargo.findAll({
-        order: ['id'],
-        where: { estado: true },
-      }),
-      RegistroCargo.count({
-        where: { estado: true },
-      }),
-    ]);
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+    const { rows:registroCargo, count } = await RegistroCargo.findAndCountAll({
+      where: { estado: true },
+      limit: pageSize,
+      offset,
+      order: [['id', 'ASC']]
+    });
+
     res
       .status(200)
-      .json({ message: 'Lista de registro de cargo', registroCargo, count });
+      .json({ message: 'Lista de cargos', registroCargo: registroCargo || [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
@@ -65,60 +69,20 @@ const cargoAdd = async (req = request, res = response) => {
 };
 
 const cargoAddAll = async (req = request, res = response) => {
-  const { body } = req;
-
-  let historial = [];
-  let existCode;
   try {
-    body.forEach(async (element, index) => {
-      const { error } = validateRegistroCargo(element);
-
-      if (error) {
-        console.log('error =>', element);
-
-        historial.push(element);
-      } else {
-        existCode = await RegistroCargo.findOne({
-          where: { codigo: element.codigo },
-        });
-        if (existCode) {
-          console.log('existe=>', element);
-
-          historial.push(element);
-        } else {
-          console.log('agregar =>', element);
-          await RegistroCargo.create({ ...element });
-        }
-      }
-
-      if (body.length - 1 === index) {
-        const unicos = [...new Set(historial)];
-        let respuesta = '';
-
-        if (error) {
-          respuesta = 'Hubo un error, revise el documento';
-          res.status(400).json({
-            error: `${respuesta} `,
-            historial: unicos,
-          });
-        } else if (existCode) {
-          respuesta = 'Hay datos repetidos, revise datos del documento';
-          res.status(400).json({
-            repeat: `${respuesta} `,
-            historial: unicos,
-          });
-        } else {
-          let respuesta = 'Se han creado con éxito';
-          res.status(201).json({
-            message: `${respuesta} `,
-            historial: unicos,
-          });
-        }
-      }
+    console.log(req.file.path)
+  
+      const response = await cargoService.importCargos(req.file.path);
+      return res.status(HttpStatus.CREATED).json({
+        response
+      });
+  } catch (error) {
+    console.error("ERROR IN cargoAddAll",error);
+    fs.unlinkSync(req.file.path);
+  
+    return res.status(HttpStatus.BAD_REQUEST).json({
+      error
     });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: 'hable con el administrador', err });
   }
 };
 
