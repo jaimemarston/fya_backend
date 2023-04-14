@@ -28,7 +28,7 @@ const comisionAll = async (req = request, res = response) => {
     const page = req?.query?.page || 1;
     const pageSize = req?.query?.pageSize || 10;
     const offset = (page - 1) * pageSize;
-    const { rows:registroCargo, count } = await LugarComision.findAndCountAll({
+    const { rows:comisiones, count } = await LugarComision.findAndCountAll({
       where: { estado: true },
       limit: pageSize,
       offset,
@@ -37,7 +37,7 @@ const comisionAll = async (req = request, res = response) => {
 
     res
       .status(200)
-      .json({ message: 'Lista de cargos', registroCargo: registroCargo || [], count });
+      .json({ message: 'Lista de cargos', comisiones: comisiones || [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
