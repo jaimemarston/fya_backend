@@ -19,6 +19,7 @@ const importEmpleados = async (filePath) => {
     const registro = {
       codigo: row[0].toString().trim(),
       docIdentidad: row[8].toString().trim(),
+      ndocumento: row[8].toString().trim(),
       nombre: row[5].toString().trim(),
       estado: row[66].toString().trim(),
       phone: row[13].toString().trim(),

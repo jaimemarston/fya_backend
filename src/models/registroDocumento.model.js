@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
+import { registroEmpleado } from './registroEmpleado.model.js';
 
 export const RegistroDocumento = sequelize.define('registroDocumento', {
   id: {
@@ -39,7 +40,8 @@ nomfile: {
     type: DataTypes.STRING,
   },
   fechaenvio: {
-    type: DataTypes.STRING,
+    type: DataTypes.DATEONLY,
+    defaultValue: sequelize.literal('CURRENT_DATE'),
   },
   
   fechadoc: {
@@ -48,6 +50,8 @@ nomfile: {
   
   estado: {
     type: DataTypes.BOOLEAN,
-    defaultValue: true,
+    defaultValue: false,
   },
 });
+
+/* RegistroDocumento.belongsTo(registroEmpleado, { foreignKey: 'ndocumento' }); */

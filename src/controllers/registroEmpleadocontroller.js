@@ -1,5 +1,5 @@
 import { request, response } from 'express';
-import {  registroEmpleado } from '../models/index.js';
+import {  RegistroDocumento, registroEmpleado } from '../models/index.js';
 import empleadoService from '../services/empleado.service.js';
 const addEmpleado = async (req = request, res = response) => {
   try {
@@ -20,7 +20,13 @@ const addEmpleado = async (req = request, res = response) => {
 const getEmpleado = async (req = request, res = response) => {
   try {
 
-    const registroEmpleados = await registroEmpleado.findAll()
+    const registroEmpleados = await registroEmpleado.findAll({
+      include: [
+        {
+          model: RegistroDocumento
+        }
+      ]
+    })
     res
     .status(201)
     .json({ message: 'Se han encontrado empleados con éxito', registroEmpleados });

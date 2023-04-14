@@ -1,10 +1,11 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
+import { RegistroDocumento } from './registroDocumento.model.js';
 
 export const registroEmpleado = sequelize.define('registroEmpleado', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
+  
     autoIncrement: true,
   },
   nombre: {
@@ -16,6 +17,10 @@ export const registroEmpleado = sequelize.define('registroEmpleado', {
   },
 
   docIdentidad: {
+    primaryKey: true,
+    type: DataTypes.STRING,
+  },
+  ndocumento: {
     type: DataTypes.STRING,
   },
   phone: {
@@ -37,3 +42,5 @@ export const registroEmpleado = sequelize.define('registroEmpleado', {
     defaultValue: true,
   },
 });
+
+/* registroEmpleado.hasMany(RegistroDocumento, { foreignKey: 'ndocumento' }); */

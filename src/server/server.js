@@ -4,6 +4,7 @@ import winston from 'winston';
 import expressWinston from 'express-winston';
 import { sequelize } from '../database/db.js';
 import {
+  registroEmpleado,
   solicitudProductoRoutes,
   solicitudRoutes,
   lugarComision,
@@ -16,7 +17,7 @@ import {
   rendicionGastosProducto,
   userRoutes,
   authLogin,
-  registroEmpleado
+  
 
 } from '../routes/index.js';
 
@@ -32,6 +33,7 @@ class Server {
   connection = async () => {
     try {
       await sequelize.sync({ force: false });
+
       await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
     } catch (error) {

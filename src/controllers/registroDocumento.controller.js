@@ -1,7 +1,7 @@
 import { request, response } from 'express';
 import { validateRegistroDocumento } from '../helpers/schemaRegistroDocumento.js';
 import { RegistroDocumento } from '../models/index.js';
-
+import fs from "fs";
 const lugarOne = async (req = request, res = response) => {
   const { id } = req.params;
   try {
@@ -70,8 +70,35 @@ const lugarAdd = async (req = request, res = response) => {
 };
 
 const lugarAddAll = async (req = request, res = response) => {
-  const { body } = req;
-  let historial = [];
+  try {
+
+    const files = req.files
+
+  const documentsData = files.map((docData) => {
+    const doc = {
+      tipodoc: docData.originalname.split("_")[0],
+      nombredoc:docData.originalname,
+      ndocumento: docData.originalname.split("_")[1]
+
+    }
+    return doc
+  } )
+
+  console.log(documentsData)
+
+  const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
+    ignoreDuplicates: true
+  })
+
+  res
+  .status(201)
+  .json({ message: 'Se ha subido con éxito', regDoc });
+    
+  } catch (error) {
+    res.status(400).json({ message: 'hable con el administrador', err });
+  }
+  
+/*   let historial = [];
   let existCode;
 
   try {
@@ -121,8 +148,92 @@ const lugarAddAll = async (req = request, res = response) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({ message: 'hable con el administrador', err });
-  }
+  } */
 };
+
+
+const addAllFirm = async (req = request, res = response) => {
+  try {
+
+    const files = req.files
+
+  const documentsData = files.map((docData) => {
+    const doc = {
+      tipodoc: docData.originalname.split("_")[0],
+      nombredoc:docData.originalname,
+      ndocumento: docData.originalname.split("_")[1]
+
+    }
+    return doc
+  } )
+
+  console.log(documentsData)
+
+  const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
+    ignoreDuplicates: true
+  })
+
+  res
+  .status(201)
+  .json({ message: 'Se ha subido con éxito', regDoc });
+    
+  } catch (error) {
+    res.status(400).json({ message: 'hable con el administrador', err });
+  }
+  
+/*   let historial = [];
+  let existCode;
+
+  try {
+    body.forEach(async (element, index) => {
+      const { error } = validateRegistroDocumento(element);
+
+      if (error) {
+        console.log('error =>', element);
+
+        historial.push(element);
+      } else {
+        existCode = await RegistroDocumento.findOne({
+          where: { codigo: element.codigo },
+        });
+        if (existCode) {
+          console.log('existe=>', element);
+          historial.push(element);
+        } else {
+          console.log('agregar =>', element);
+          await RegistroDocumento.create({ ...element });
+        }
+      }
+      if (body.length - 1 === index) {
+        const unicos = [...new Set(historial)];
+        let respuesta = '';
+        if (error) {
+          respuesta = 'Hubo un error, revise el documento';
+          res.status(400).json({
+            error: `${respuesta} `,
+            historial: unicos,
+          });
+        } else if (existCode) {
+          respuesta = 'Hay datos repetidos, revise datos del documento';
+          res.status(400).json({
+            repeat: `${respuesta} `,
+            historial: unicos,
+          });
+        } else {
+          let respuesta = 'Se han creado con éxito';
+          res.status(201).json({
+            message: `${respuesta} `,
+            historial: unicos,
+          });
+        }
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: 'hable con el administrador', err });
+  } */
+};
+
 
 const lugarUpdate = async (req = request, res = response) => {
   const { id } = req.params;
@@ -158,13 +269,23 @@ const lugarUpdate = async (req = request, res = response) => {
 
 const lugarDelete = async (req = request, res = response) => {
   const { id } = req.params;
+
   try {
     const registroDocumento = await RegistroDocumento.findByPk(id);
+    const nombreDoc = registroDocumento.nombredoc;
     if (!registroDocumento) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
     // console.log(registroDocumento);
-    await registroDocumento.update({ estado: false });
+    await registroDocumento.destroy();
+    fs.unlink(`public/uploads/${nombreDoc}`, (error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Archivo eliminado correctamente');
+        
+      }
+    });
     res
       .status(200)
       .json({ message: 'Se elimino con éxito', registroDocumento });
@@ -200,4 +321,5 @@ export {
   lugarDelete,
   lugarBlockDelete,
   lugarAddAll,
+  addAllFirm
 };
