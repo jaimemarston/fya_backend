@@ -9,6 +9,7 @@ export const LugarComision = sequelize.define('lugarComision', {
   },
   codigo: {
     type: DataTypes.STRING,
+    primaryKey: true,
   },
   descripcion: {
     type: DataTypes.STRING,
