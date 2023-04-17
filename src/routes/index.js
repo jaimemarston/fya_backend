@@ -11,6 +11,7 @@ import registroDocumento from './registroDocumento.routes.js';
 import lugarComision from './lugarComision.routes.js';
 import registroCodigosReferencia from "./registroCodigosReferencia.routes.js";
 import registroEmpleado from './registroEmpleado.routes.js';
+import registroPresupuestoFinanciero from "./registroPresupuestoFinanciero.routes.js";
 import user from "./user.routes.js";
 
 export {
@@ -26,5 +27,6 @@ export {
   registroCargo,
   rendicionGastos,
   rendicionGastosProducto,
-  registroCodigosReferencia
+  registroCodigosReferencia,
+  registroPresupuestoFinanciero
 };

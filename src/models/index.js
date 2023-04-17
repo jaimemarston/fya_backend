@@ -9,5 +9,6 @@ export { RegistroCargo } from './registroCargo.model.js';
 export { RegistroDocumento } from './registroDocumento.model.js';
 export { LugarComision } from './lugarComision.model.js';
 export { RegistroCodigoReferencia } from "./registroCodigoReferencia.model.js";
+export { RegistroPresupuestoFinanciero } from './registroPresupuestoFInanciero.model.js';
 
 export { Usuario } from './user.model.js';
