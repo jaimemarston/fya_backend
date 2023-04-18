@@ -1,7 +1,23 @@
 import { request, response } from 'express';
 import { validateRegistroDocumento } from '../helpers/schemaRegistroDocumento.js';
-import { RegistroDocumento } from '../models/index.js';
+import { RegistroDocumento, Usuario } from '../models/index.js';
 import fs from "fs";
+import multer from "multer";
+import {PDFDocument}  from 'pdf-lib';
+
+
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
 const lugarOne = async (req = request, res = response) => {
   const { id } = req.params;
   try {
@@ -169,9 +185,9 @@ const addAllFirm = async (req = request, res = response) => {
 
   console.log(documentsData)
 
-  const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
+/*   const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
     ignoreDuplicates: true
-  })
+  }) */
 
   res
   .status(201)
@@ -234,6 +250,105 @@ const addAllFirm = async (req = request, res = response) => {
   } */
 };
 
+
+const firmarDoc = async (req,res,next) => {
+  const {user,doc} = req.body
+
+
+
+  
+try {
+  const pdfBytes =   fs.readFileSync(process.cwd() + `/public/uploads/${doc.nombredoc}`);
+  const pdfDoc = await PDFDocument.load(pdfBytes);    // Encuentra las coordenadas donde se colocará la imagen de la firma
+  const page = pdfDoc.getPages()[0]; // Obtén la primera página del PDF
+  const { width, height } = page.getSize(); // Obtén el ancho y alto de la página
+/*     const x = width / 2; // Coloca la imagen en el centro de la página
+  const y = height / 2; */
+
+  // Agrega la imagen como un sello en la página
+  const imageBytes = fs.readFileSync(process.cwd() + `/public/uploads/firmas/${user.imgfirma}.jpg`);
+
+  const image = await pdfDoc.embedJpg(imageBytes);
+  page.drawImage(image, {
+/*       x: x - image.width / 2, // Ajusta la posición de la imagen
+    y: y - image.height / 2, */
+    x: 70,
+    y: 60 ,
+    width: 50,
+    height: 50,
+  });
+
+ const newPdf = await  pdfDoc.save()    
+
+ fs.writeFile(process.cwd() + `/public/uploads/firmado_${doc.nombredoc}`, newPdf, function(err) {
+  if (err) {
+    console.log('Error al guardar el archivo:', err);
+  } else {
+    console.log('El archivo se ha guardado correctamente');
+  }
+});
+
+fs.unlink(process.cwd() + `/public/uploads/${doc.nombredoc}`, (err) => {
+  if (err) throw err;
+  console.log('Archivo borrado exitosamente');
+});
+
+const fecha = new Date();
+const anio = fecha.getFullYear();
+const mes = fecha.getMonth() + 1;
+const dia = fecha.getDate();
+const fechaPlana = `${anio}-${mes.toString().padStart(2, '0')}-${dia.toString().padStart(2, '0')}`;
+const documento = await RegistroDocumento.findOne({where:{id:doc.id}})
+ await documento.update({estado:true, fechafirma: fechaPlana})
+ res.status(200).send({ message: 'Firmado Correctamente', newdoc: documento});
+} catch (error) {
+  console.log(error)
+}
+  
+
+
+  
+ 
+}
+
+const uploadfile = async (req, res, next) => {
+  const file = req.file;
+  const dni = req.params.dni;
+  console.log(dni)
+
+  const extension = file.path.split('.');
+  console.log('path=>', extension[1].toLowerCase());
+  if (extension[1].toLowerCase() !== 'jpg') {
+    return res.status(404).json({ message: 'Formato no permitido' });
+  }
+
+  const firmaImc = 'firma_';
+  const firmaComp = `${firmaImc}${dni}`;
+  file.originalname = firmaComp;
+  file.filename = firmaComp;
+
+
+  if (!file) {
+    const error = new Error('Seleccione un archivo');
+    error.httpStatusCode = 400;
+    return next(error);
+  }
+
+  try {
+
+const result = await Usuario.findOne({where: {dni: dni}});
+
+
+    if (!result)
+      return res.status(404).json({ message: 'Empleado no Encontrado' });
+
+   result.update({imgfirma: firmaComp})   
+
+    return res.json(result);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 const lugarUpdate = async (req = request, res = response) => {
   const { id } = req.params;
@@ -321,5 +436,7 @@ export {
   lugarDelete,
   lugarBlockDelete,
   lugarAddAll,
-  addAllFirm
+  addAllFirm,
+  uploadfile,
+  firmarDoc
 };

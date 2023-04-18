@@ -28,6 +28,12 @@ export const Usuario = sequelize.define('usuarios', {
   image: {
     type: DataTypes.STRING,
   },
+  dni: {
+    type: DataTypes.STRING,
+  },
+  imgfirma: {
+    type: DataTypes.STRING,
+  },
   rol: {
     type: DataTypes.ENUM(["ADMIN_ROLE", "USER_ROLE"]),
   },
