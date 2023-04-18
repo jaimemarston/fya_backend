@@ -1,5 +1,6 @@
  import userRoutes from './user.routes.js';
  import authLogin from './auth.routes.js';
+ import registroEmpleado from './registroEmpleado.routes.js';
 import solicitudRoutes from './solicitud.routes.js';
 import solicitudProductoRoutes from './solicitudProducto.routes.js';
 import rendicionGastos from './rendicionGastos.routes.js';
@@ -10,7 +11,8 @@ import registroCargo from './registroCargo.router.js';
 import registroDocumento from './registroDocumento.routes.js';
 import lugarComision from './lugarComision.routes.js';
 import registroCodigosReferencia from "./registroCodigosReferencia.routes.js";
-import registroEmpleado from './registroEmpleado.routes.js';
+
+
 import registroPresupuestoFinanciero from "./registroPresupuestoFinanciero.routes.js";
 import user from "./user.routes.js";
 

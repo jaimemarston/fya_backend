@@ -1,14 +1,18 @@
 import { request, response } from 'express';
-import {  registroEmpleado } from '../models/index.js';
+import {  RegistroDocumento, registroEmpleado } from '../models/index.js';
 import empleadoService from '../services/empleado.service.js';
+import userService from '../services/user.service.js';
 const addEmpleado = async (req = request, res = response) => {
   try {
 
     console.log(req.file.path)
-    const response = await empleadoService.importEmpleados(req.file.path);
+    const {result, data} = await empleadoService.importEmpleados(req.file.path);
+    const user = await userService.importUers(data)
     res
     .status(201)
-    .json({ message: 'Se ha creado con éxito', response });
+    .json({ message: 'Se ha creado con éxito', result });
+
+    
     
   } catch (error) {
     res.status(400).json({ message: 'hable con el administrador', error });
@@ -20,7 +24,36 @@ const addEmpleado = async (req = request, res = response) => {
 const getEmpleado = async (req = request, res = response) => {
   try {
 
-    const registroEmpleados = await registroEmpleado.findAll()
+    const registroEmpleados = await registroEmpleado.findAll({
+      include: [
+        {
+          model: RegistroDocumento
+        }
+      ]
+    })
+    res
+    .status(201)
+    .json({ message: 'Se han encontrado empleados con éxito', registroEmpleados });
+    
+  } catch (error) {
+    res.status(400).json({ message: 'hable con el administrador', error });
+  }
+
+};
+
+const getEmpleadoByDni = async (req = request, res = response) => {
+  const dni = req.params.dni;
+  console.log(dni)
+  try {
+
+    const registroEmpleados = await registroEmpleado.findAll({
+      where:{ndocumento:dni},
+      include: [
+        {
+          model: RegistroDocumento
+        }
+      ]
+    })
     res
     .status(201)
     .json({ message: 'Se han encontrado empleados con éxito', registroEmpleados });
@@ -50,5 +83,6 @@ const deleteEmpleado = async (req = request, res = response) => {
 export {
   addEmpleado,
   getEmpleado,
-  deleteEmpleado
+  deleteEmpleado,
+  getEmpleadoByDni
 };

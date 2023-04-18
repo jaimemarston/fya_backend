@@ -3,16 +3,9 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const schemaUser = Joi.object({
-  codigo: Joi.string()
-  .required()
-  .error((errors) => {
-    errors.forEach((data) => {
-      if (data.code === 'string.empty') {
-        console.log('=>', (data.message = 'El codigo no debe estar vació'));
-      }
-    });
-    return errors;
-  }),
+  codigo: Joi.string(),
+  dni: Joi.string(),
+  imgfirma: Joi.string(),
   estado: Joi.boolean()
   .required()
   .error((errors) => {
