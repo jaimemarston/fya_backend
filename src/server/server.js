@@ -4,7 +4,7 @@ import winston from 'winston';
 import expressWinston from 'express-winston';
 import { sequelize } from '../database/db.js';
 import {
-  registroEmpleado,
+
   solicitudProductoRoutes,
   solicitudRoutes,
   lugarComision,
