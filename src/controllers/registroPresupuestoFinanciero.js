@@ -1,32 +1,32 @@
 import { request, response } from 'express';
-import { validateRegistroProyecto } from '../helpers/schemaRegistroProyecto.js';
-import { RegistroProyecto } from "../models/index.js";
+import { validateRegistroPresupuesto } from '../helpers/schemaPresupuestoFinanciero.js';
+import { RegistroPresupuestoFinanciero } from "../models/index.js";
 import { HttpStatus } from '../utils/status.utils.js';
-import projectService from '../services/project.service.js';
+import presupuestoFinanciero from '../services/presupuestoFinanciero.service.js';
 import fs from "fs";
 
-const regProyectoOne = async (req = request, res = response) => {
+const registroPresupuestoFinancieroOne = async (req = request, res = response) => {
   const { id } = req.params;
   try {
-    const registroProyecto = await RegistroProyecto.findOne({
+    const presupuestos = await RegistroPresupuestoFinanciero.findOne({
       where: { id, estado: true },
     });
 
-    if (!registroProyecto) {
+    if (!presupuestos) {
       return res.status(404).json({ message: 'Proyecto no encontrado' });
     }
-    res.status(200).json({ message: 'Proyecto encontrado', registroProyecto });
+    res.status(200).json({ message: 'Proyecto encontrado', presupuestos });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
 
-const regProyectoAll = async (req = request, res = response) => {
+const registroPresupuestoFinancieroAll = async (req = request, res = response) => {
   try {
     const page = req?.query?.page || 1;
     const pageSize = req?.query?.pageSize || 10;
     const offset = (page - 1) * pageSize;
-    const { rows:registroProyecto, count } = await RegistroProyecto.findAndCountAll({
+    const { rows:presupuestos, count } = await RegistroPresupuestoFinanciero.findAndCountAll({
       where: { estado: true },
       limit: pageSize,
       offset,
@@ -35,22 +35,22 @@ const regProyectoAll = async (req = request, res = response) => {
 
     res
       .status(200)
-      .json({ message: 'Lista de proyectos', registroProyecto: registroProyecto || [], count });
+      .json({ message: 'Lista de presupuestos', presupuestos: presupuestos || [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
 
-const regProyectoAdd = async (req = request, res = response) => {
+const registroPresupuestoFinancieroAdd = async (req = request, res = response) => {
   const { body } = req;
   // console.log(body);
-  const { error } = validateRegistroProyecto(req.body);
+  const { error } = validateRegistroPresupuesto(req.body);
   if (error) {
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
   }
   try {
-    const existCode = await RegistroProyecto.findOne({
+    const existCode = await RegistroPresupuestoFinanciero.findOne({
       where: { codigo: body.codigo },
     });
 
@@ -58,26 +58,26 @@ const regProyectoAdd = async (req = request, res = response) => {
       return res.status(404).json({ message: 'El código ya existe' });
     }
 
-    const registroProyecto = await RegistroProyecto.create({ ...body });
+    const presupuestos = await RegistroPresupuestoFinanciero.create({ ...body });
     res
       .status(201)
-      .json({ message: 'Se ha creado con éxito', registroProyecto });
+      .json({ message: 'Se ha creado con éxito', presupuestos });
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: 'hable con el administrador', err });
   }
 };
 
-const regProyectoAddAll = async (req = request, res = response) => {
+const registroPresupuestoFinancieroAddAll = async (req = request, res = response) => {
 try {
   console.log(req.file.path)
 
-    const response = await projectService.importProjects(req.file.path);
+    const response = await presupuestoFinanciero.importBudgets(req.file.path);
     return res.status(HttpStatus.CREATED).json({
       response
     });
 } catch (error) {
-  console.error("ERROR IN regProyectoAddAll",error);
+  console.error("ERROR IN registroPresupuestoFinancieroAddAll",error);
   fs.unlinkSync(req.file.path);
 
   return res.status(HttpStatus.BAD_REQUEST).json({
@@ -86,12 +86,12 @@ try {
 }
 };
 
-const regProyectoUpdate = async (req = request, res = response) => {
+const registroPresupuestoFinancieroUpdate = async (req = request, res = response) => {
   const { id } = req.params;
   const { body } = req;
   try {
-    const registroProyecto = await RegistroProyecto.findByPk(id);
-    // const existCode = await RegistroProyecto.findOne({
+    const presupuestos = await RegistroPresupuestoFinanciero.findByPk(id);
+    // const existCode = await RegistroPresupuestoFinanciero.findOne({
     //   where: { codigo: body.codigo },
     // });
 
@@ -99,11 +99,11 @@ const regProyectoUpdate = async (req = request, res = response) => {
     //   return res.status(404).json({ message: 'El código ya existe' });
     // }
 
-    if (!registroProyecto) {
+    if (!presupuestos) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
 
-    await RegistroProyecto.update(
+    await RegistroPresupuestoFinanciero.update(
       { ...body },
       {
         where: {
@@ -122,29 +122,29 @@ const regProyectoUpdate = async (req = request, res = response) => {
   }
 };
 
-const regProyectoDelete = async (req = request, res = response) => {
+const registroPresupuestoFinancieroDelete = async (req = request, res = response) => {
   const { id } = req.params;
   try {
-    const registroProyecto = await RegistroProyecto.findByPk(id);
-    if (!registroProyecto) {
+    const presupuestos = await RegistroPresupuestoFinanciero.findByPk(id);
+    if (!presupuestos) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
-    await registroProyecto.update({ estado: false });
-    res.status(200).json({ message: 'Se elimino con éxito', registroProyecto });
+    await presupuestos.update({ estado: false });
+    res.status(200).json({ message: 'Se elimino con éxito', presupuestos });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
 
-const regProyectoBlockDelete = (req = request, res = response) => {
+const registroPresupuestoFinancieroBlockDelete = (req = request, res = response) => {
   const { body } = req;
   try {
     body.map(async (element, index) => {
-      const registroProyecto = await RegistroProyecto.findByPk(element);
-      // if (!registroProyecto) {
+      const presupuestos = await RegistroPresupuestoFinanciero.findByPk(element);
+      // if (!presupuestos) {
       //   return res.status(404).json({ message: 'El dato ingresado no existe' });
       // }
-      await registroProyecto.update({ estado: false });
+      await presupuestos.update({ estado: false });
       if (body.length - 1 === index) {
         res.status(200).json({ message: 'Se han eliminado con éxito' });
       }
@@ -155,11 +155,11 @@ const regProyectoBlockDelete = (req = request, res = response) => {
 };
 
 export {
-  regProyectoOne,
-  regProyectoAll,
-  regProyectoAdd,
-  regProyectoAddAll,
-  regProyectoUpdate,
-  regProyectoDelete,
-  regProyectoBlockDelete,
+  registroPresupuestoFinancieroOne,
+  registroPresupuestoFinancieroAll,
+  registroPresupuestoFinancieroAdd,
+  registroPresupuestoFinancieroAddAll,
+  registroPresupuestoFinancieroUpdate,
+  registroPresupuestoFinancieroDelete,
+  registroPresupuestoFinancieroBlockDelete,
 };

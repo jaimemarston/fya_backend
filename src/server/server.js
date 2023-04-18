@@ -17,8 +17,8 @@ import {
   rendicionGastosProducto,
   userRoutes,
   authLogin,
-  
-
+  registroEmpleado,
+  registroPresupuestoFinanciero
 } from '../routes/index.js';
 
 class Server {
@@ -75,6 +75,7 @@ class Server {
     this.app.use('/api', lugarComision);
     this.app.use('/api', registroCodigosReferencia);
     this.app.use('/api', userRoutes); 
+    this.app.use('/api', registroPresupuestoFinanciero);
   }
 
   listen() {

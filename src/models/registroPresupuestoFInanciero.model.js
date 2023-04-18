@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database/db.js';
 
-export const RegistroCargo = sequelize.define('registroCargo', {
+export const RegistroPresupuestoFinanciero = sequelize.define('registroPresupuestoFinanciero', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -11,11 +11,14 @@ export const RegistroCargo = sequelize.define('registroCargo', {
     type: DataTypes.STRING,
     primaryKey: true,
   },
-  descripcion: {
+  nombreAbreviado: {
+    type: DataTypes.STRING,
+  },
+  nombreCompleto: {
     type: DataTypes.STRING,
   },
   estado: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
-  },
+  }
 });
