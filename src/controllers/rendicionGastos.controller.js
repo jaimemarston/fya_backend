@@ -40,7 +40,7 @@ const rendGastosOne = async (req = request, res = response) => {
   }
 };
 
-const rendGastosAll = async (req = request, res = response) => {
+const rendGastosAll = async (req = request, res = response) => {yy
   try {
     const [rendicionGastos, count] = await Promise.all([
       RendicionGastos.findAll({
@@ -54,6 +54,10 @@ const rendGastosAll = async (req = request, res = response) => {
       rendicionGastos,
       count,
     });
+
+    res
+      .status(200)
+      .json({ message: 'Lista de rendición de gastos', rendicionGastos: rendicionGastos|| [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
