@@ -40,28 +40,28 @@ const rendGastosOne = async (req = request, res = response) => {
   }
 };
 
-const rendGastosAll = async (req = request, res = response) => {yy
+const rendGastosAll = async (req = request, res = response) => {
   try {
-    const page = req?.query?.page || 1;
-    const pageSize = req?.query?.pageSize || 10;
-    const offset = (page - 1) * pageSize;
-
-    const { rows: rendicionGastos, count } = await RegistroCodigoReferencia.findAndCountAll({
-      where: { estado: true },
-      include: RendicionGastosProducto,
-      limit: pageSize,
-      offset,
-      order: [['id', 'ASC']]
+    const [rendicionGastos, count] = await Promise.all([
+      RendicionGastos.findAll({
+        order: ['id'],
+        where: { estado: true },
+      
+        
+      }),
+      RendicionGastos.count({
+        where: { estado: true },
+      }),
+    ]);
+    res.status(200).json({
+      message: 'Lista de rendición de gastos',
+      rendicionGastos,
+      count,
     });
-
-    res
-      .status(200)
-      .json({ message: 'Lista de rendición de gastos', rendicionGastos: rendicionGastos|| [], count });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
-
 const rendGastosAdd = async (req = request, res = response) => {
   const { body } = req;
   const { proyecto } = body;

@@ -18,7 +18,8 @@ import {
   userRoutes,
   authLogin,
   registroEmpleado,
-  registroPresupuestoFinanciero
+  registroPresupuestoFinanciero,
+  registroTipoDocumento
 } from '../routes/index.js';
 
 class Server {
@@ -63,6 +64,7 @@ class Server {
 
   routes() {
     this.app.use('/api', authLogin);
+    this.app.use('/api', registroTipoDocumento);
     this.app.use('/api', registroEmpleado);
     this.app.use('/api', solicitudRoutes);
     this.app.use('/api', solicitudProductoRoutes);

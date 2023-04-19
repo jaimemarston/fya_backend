@@ -27,7 +27,10 @@ const login = async (req, res) => {
         .status(400)
         .json({ message: 'Las contraseñas no son correctas' });
     }
-    // console.log(usuario.id);
+
+
+      
+
 
     usuario.password = null
    

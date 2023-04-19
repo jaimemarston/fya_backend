@@ -21,6 +21,23 @@ const regProyectoOne = async (req = request, res = response) => {
   }
 };
 
+
+const regProyectoOneByName = async (req = request, res = response) => {
+  const { proyecto } = req.params;
+  try {
+    const registroProyecto = await RegistroProyecto.findOne({
+      where: { nombreAbreviado: proyecto, estado: true },
+    });
+
+    if (!registroProyecto) {
+      return res.status(404).json({ message: 'Proyecto no encontrado' });
+    }
+    res.status(200).json({ message: 'Proyecto encontrado', registroProyecto });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
 const regProyectoAll = async (req = request, res = response) => {
   try {
     const page = req?.query?.page || 1;
@@ -40,6 +57,12 @@ const regProyectoAll = async (req = request, res = response) => {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
+
+
+
+
+
+
 
 const regProyectoAdd = async (req = request, res = response) => {
   const { body } = req;
@@ -162,4 +185,5 @@ export {
   regProyectoUpdate,
   regProyectoDelete,
   regProyectoBlockDelete,
+  regProyectoOneByName
 };
