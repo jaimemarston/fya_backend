@@ -46,10 +46,7 @@ const rendGastosAll = async (req = request, res = response) => {
       RendicionGastos.findAll({
         order: ['id'],
         where: { estado: true },
-        include: RendicionGastosProducto,
-      }),
-      RendicionGastos.count({
-        where: { estado: true },
+      
       }),
     ]);
     res.status(200).json({
