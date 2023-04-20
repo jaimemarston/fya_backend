@@ -37,6 +37,26 @@ const getAllTipoDoc = async (req = request, res = response) => {
 };
 
 
+const getOneTipoDoc = async (req = request, res = response) => {
+
+  const {id} = req.params
+  try {
+
+   const result = await  RegistroTipoDocumento.findOne({where:{id}})
+
+    res
+    .status(201)
+    .json({ message: 'Se ha creado con éxito', result });
+
+    
+    
+  } catch (error) {
+    res.status(400).json({ message: 'hable con el administrador', error });
+  }
+
+};
+
+
 const deleteTipoDoc = async (req = request, res = response) => {
   try {
 
@@ -61,4 +81,4 @@ const deleteTipoDoc = async (req = request, res = response) => {
 
 
 
-export { addTipoDoc, getAllTipoDoc, deleteTipoDoc };
+export { addTipoDoc, getAllTipoDoc, deleteTipoDoc, getOneTipoDoc };
