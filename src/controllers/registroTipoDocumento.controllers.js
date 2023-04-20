@@ -21,19 +21,21 @@ const addTipoDoc = async (req = request, res = response) => {
 
 const getAllTipoDoc = async (req = request, res = response) => {
   try {
-
-   const result = await  RegistroTipoDocumento.findAll()
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+    const { rows: registroTipoDocumento, count } = await RegistroTipoDocumento.findAndCountAll({
+      limit: pageSize,
+      offset,
+      order: [['id', 'ASC']]
+    });
 
     res
-    .status(201)
-    .json({ message: 'Se ha creado con éxito', result });
-
-    
-    
-  } catch (error) {
-    res.status(400).json({ message: 'hable con el administrador', error });
+      .status(200)
+      .json({ message: 'Lista de tipos de documentos', registroTipoDocumento: registroTipoDocumento || [], count });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
   }
-
 };
 
 
