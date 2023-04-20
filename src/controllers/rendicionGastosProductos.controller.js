@@ -26,6 +26,27 @@ const rendGastosProductsAll = async (req = request, res = response) => {
 
 const rendGastosProductsOne = (req = request, res = response) => {};
 
+const rendGastosProductsByRendicion = async (req = request, res = response) => {
+
+  const {rendicion} = req.params;
+
+try {
+
+  const rendicionGastosProduct = await RendicionGastosProducto.findAll({where: {	rendicionGastosId: rendicion}})
+
+  res.status(200).json({
+    message: 'Lista de rendición de gastos',
+    rendicionGastosProduct,
+  });
+
+  
+} catch (error) {
+  return res.status(400).json({ message: 'Hable con el administrador', error });
+}
+
+
+};
+
 const rendGastosProductsAdd = async (req = request, res = response) => {
   // console.log(req.body);
   const { body } = req;
@@ -84,6 +105,7 @@ const rendGastosProductsBlockDelete = (req = request, res = response) => {};
 export {
   rendGastosProductsAll,
   rendGastosProductsOne,
+  rendGastosProductsByRendicion,
   rendGastosProductsAdd,
   rendGastosProductsUpdate,
   rendGastosProductsDelete,
