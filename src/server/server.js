@@ -28,7 +28,6 @@ class Server {
     this.port = process.env.PORT;
     this.connection();
     this.middleware();
-    this.routes();
   } 
 
   connection = async () => {
@@ -60,6 +59,8 @@ class Server {
       colorize: false, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
       ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
     }));
+
+    this.routes();
   }
 
   routes() {
