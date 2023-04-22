@@ -19,7 +19,8 @@ import {
   authLogin,
   registroEmpleado,
   registroPresupuestoFinanciero,
-  registroTipoDocumento
+  registroTipoDocumento,
+  registroPresupuesto
 } from '../routes/index.js';
 
 class Server {
@@ -79,6 +80,7 @@ class Server {
     this.app.use('/api', registroCodigosReferencia);
     this.app.use('/api', userRoutes); 
     this.app.use('/api', registroPresupuestoFinanciero);
+    this.app.use('/api', registroPresupuesto);
   }
 
   listen() {

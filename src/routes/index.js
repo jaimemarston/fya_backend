@@ -12,6 +12,7 @@ import registroDocumento from './registroDocumento.routes.js';
 import lugarComision from './lugarComision.routes.js';
 import registroCodigosReferencia from "./registroCodigosReferencia.routes.js";
 import registroPresupuestoFinanciero from "./registroPresupuestoFinanciero.routes.js";
+import registroPresupuesto from "./registroPresupuesto.routes.js";
 import  registroTipoDocumento from "./registroTipoDocumento.routes.js";
 import user from "./user.routes.js";
 
@@ -30,5 +31,6 @@ export {
   rendicionGastosProducto,
   registroCodigosReferencia,
   registroPresupuestoFinanciero,
-  registroTipoDocumento
+  registroTipoDocumento,
+  registroPresupuesto
 };

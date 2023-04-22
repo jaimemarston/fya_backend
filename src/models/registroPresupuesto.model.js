@@ -8,12 +8,17 @@ export const registroPresupuesto = sequelize.define('registroPresupuesto', {
     autoIncrement: true,
   },
   codigo: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
+    primaryKey: true,
   },
-  proyecto: {
+  nombreAbreviado: {
     type: DataTypes.STRING,
   },
-  equivalentesTecnicos: {
+  nombreCompleto: {
     type: DataTypes.STRING,
   },
+  estado: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  }
 });
