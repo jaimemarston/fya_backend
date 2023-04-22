@@ -47,7 +47,7 @@ const regProyectoAll = async (req = request, res = response) => {
       where: { estado: true },
       limit: pageSize,
       offset,
-      order: [['id', 'ASC']]
+   
     });
 
     res
