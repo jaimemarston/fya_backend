@@ -24,9 +24,12 @@ const regProyectoOne = async (req = request, res = response) => {
 
 const regProyectoOneByName = async (req = request, res = response) => {
   const { proyecto } = req.params;
+/* 
+  const project = decodeURIComponent(proyecto) */
+  console.log(proyecto)
   try {
     const registroProyecto = await RegistroProyecto.findOne({
-      where: { nombreAbreviado: proyecto, estado: true },
+      where: { nombreAbreviado: `${proyecto}`, estado: true },
     });
 
     if (!registroProyecto) {

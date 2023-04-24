@@ -59,6 +59,43 @@ const solicitudProductoAdd = async (req = request, res = response) => {
   }
 };
 
+
+const solicitudProductoUpdate = async (req = request, res = response) => {
+  const { id } = req.params;
+  const  solicitud  = req.body;
+
+  console.log(solicitud)
+
+
+  try {
+    const producto = await SolicitudProducto.update(
+      {...solicitud},
+      {
+        where: {
+          id,
+        },
+      });
+
+
+    if (!producto) {
+      return res.status(400).json({ message: 'No existe el usuario' });
+    }
+
+   /*  const producto = await SolicitudProducto.create({ ...body }); */
+
+    res
+      .status(201)
+      .json({ message: 'El producto ha sido creado con éxito', producto });
+  } catch (error) {
+    console.log('error', error);
+    res.status(400).json({ message: 'hable con el administrador', error });
+  }
+};
+
+
+
+
+
 const solicitudProductoDelete = async (req = request, res = response) => {
   const { id } = req.params;
   const producto = await SolicitudProducto.findByPk(id);
@@ -73,4 +110,4 @@ const solicitudProductoDelete = async (req = request, res = response) => {
   }
 };
 
-export { solicitudProductoAll, solicitudProductoAdd, solicitudProductoDelete };
+export { solicitudProductoAll, solicitudProductoAdd, solicitudProductoDelete, solicitudProductoUpdate };
