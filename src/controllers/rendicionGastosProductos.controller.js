@@ -51,6 +51,8 @@ const rendGastosProductsAdd = async (req = request, res = response) => {
   // console.log(req.body);
   const { body } = req;
 
+  console.log(body)
+
   const { error } = validateRendicionProductSchema(req.body);
   if (error) {
     const err = error.details[0].message;
@@ -79,7 +81,33 @@ const rendGastosProductsAdd = async (req = request, res = response) => {
   }
 };
 
-const rendGastosProductsUpdate = (req = request, res = response) => {};
+const rendGastosProductsUpdate = async (req = request, res = response) => {
+  const { id } = req.params;
+  const {body} = req;
+ 
+  try {
+    const { error } = validateRendicionProductSchema(req.body);
+    if (error) {
+      const err = error.details[0].message;
+      return res.status(400).json({ message: err });
+    }
+    const rendicionGastosProducts = await RendicionGastosProducto.findByPk(id);
+    if (!rendicionGastosProducts) {
+      return res.status(404).json({ message: 'El dato ingresado no existe' });
+    }
+
+   const rendicionGastosProduct =  await rendicionGastosProducts.update({...body}, {where: {id}})
+
+   console.log(rendicionGastosProduct)
+     res
+     .status(201)
+     .json({ message: 'Se ha creado con éxito', rendicionGastosProduct });
+    
+  } catch (error) {
+  
+    res.status(400).json({ message: 'hable con el administrador', error });
+  }
+};
 
 const rendGastosProductsDelete = async (req = request, res = response) => {
   const { id } = req.params;
