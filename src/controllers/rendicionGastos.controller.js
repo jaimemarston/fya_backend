@@ -8,13 +8,14 @@ import {
 
 const rendGastosOne = async (req = request, res = response) => {
   const { id } = req.params;
+  try {
   const [rendGastosProducts, producto] = await Promise.all([
     RendicionGastos.findByPk(id),
     RendicionGastosProducto.findAll({
       where: { rendicionGastosId: id },
     }),
   ]);
-  try {
+
     if (!rendGastosProducts) {
       return res.status(404).json({ message: 'Id no encontrado' });
     }
@@ -134,7 +135,7 @@ const rendGastosUpdate = async (req = request, res = response) => {
 
     res.json({
       message: 'Rendicion de gastos actualizado',
-      lugar: { ...body },
+      rendicionGastos: { ...body },
     });
   } catch (err) {
     console.log(err);

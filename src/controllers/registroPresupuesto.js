@@ -129,7 +129,7 @@ const registroPresupuestoDelete = async (req = request, res = response) => {
     if (!presupuestos) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
-    await presupuestos.update({ estado: false });
+    await presupuestos.destroy( {where: {id}} );
     res.status(200).json({ message: 'Se elimino con éxito', presupuestos });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
