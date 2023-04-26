@@ -1,6 +1,6 @@
 import xlsx from "xlsx";
 import fs from "fs";
-import { RegistroPresupuestoFinanciero } from "../models/index.js";
+import { registroPresupuesto } from "../models/index.js";
 
 const importBudgets = async (filePath) => {
     const workbook = xlsx.readFile(filePath);
@@ -9,7 +9,7 @@ const importBudgets = async (filePath) => {
 
     // Eliminar la primera fila (encabezados de columna)
     rows.shift();
-    rows.shift();
+    
     
   
     // Crear un array de objetos para bulkCreate
@@ -17,14 +17,14 @@ const importBudgets = async (filePath) => {
     const registro = {
       codigo: row[0].toString().trim(),
       nombreAbreviado: row[1].toString().trim(),
-      nombreCompleto: row[1].toString().trim(),
+      nombreCompleto: row[2].toString().trim(),
       estado: true ?? row[0],
     };
     return registro
   });
   
   // Guardar los datos en la tabla
-  const result = await RegistroPresupuestoFinanciero.bulkCreate(data, {
+  const result = await registroPresupuesto.bulkCreate(data, {
     ignoreDuplicates: true
   });
 
