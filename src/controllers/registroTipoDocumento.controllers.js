@@ -46,11 +46,11 @@ const addTipoDocOne = async (req = request, res = response) => {
 const getAllTipoDoc = async (req = request, res = response) => {
   try {
 
-   const registroTipoDocumento = await  RegistroTipoDocumento.findAll()
+   const result = await  RegistroTipoDocumento.findAll()
 
     res
     .status(201)
-    .json({ message: 'Se ha creado con éxito', registroTipoDocumento });
+    .json({ message: 'Se ha creado con éxito', result });
 
     
     
