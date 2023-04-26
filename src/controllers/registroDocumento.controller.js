@@ -173,21 +173,22 @@ const addAllFirm = async (req = request, res = response) => {
 
     const files = req.files
 
-  const documentsData = files.map((docData) => {
-    const doc = {
-      tipodoc: docData.originalname.split("_")[0],
-      nombredoc:docData.originalname,
-      ndocumento: docData.originalname.split("_")[1]
-
-    }
-    return doc
-  } )
+    const documentsData = files.map((docData) => {
+      const doc = {
+        tipodoc: docData.originalname.split("_")[0],
+        nombredoc:docData.originalname,
+        ndocumento: docData.originalname.split("_")[1],
+        estado: true
+  
+      }
+      return doc
+    } )
 
   console.log(documentsData)
-
-/*   const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
+  const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
     ignoreDuplicates: true
-  }) */
+  })
+
 
   res
   .status(201)
@@ -197,57 +198,7 @@ const addAllFirm = async (req = request, res = response) => {
     res.status(400).json({ message: 'hable con el administrador', err });
   }
   
-/*   let historial = [];
-  let existCode;
 
-  try {
-    body.forEach(async (element, index) => {
-      const { error } = validateRegistroDocumento(element);
-
-      if (error) {
-        console.log('error =>', element);
-
-        historial.push(element);
-      } else {
-        existCode = await RegistroDocumento.findOne({
-          where: { codigo: element.codigo },
-        });
-        if (existCode) {
-          console.log('existe=>', element);
-          historial.push(element);
-        } else {
-          console.log('agregar =>', element);
-          await RegistroDocumento.create({ ...element });
-        }
-      }
-      if (body.length - 1 === index) {
-        const unicos = [...new Set(historial)];
-        let respuesta = '';
-        if (error) {
-          respuesta = 'Hubo un error, revise el documento';
-          res.status(400).json({
-            error: `${respuesta} `,
-            historial: unicos,
-          });
-        } else if (existCode) {
-          respuesta = 'Hay datos repetidos, revise datos del documento';
-          res.status(400).json({
-            repeat: `${respuesta} `,
-            historial: unicos,
-          });
-        } else {
-          let respuesta = 'Se han creado con éxito';
-          res.status(201).json({
-            message: `${respuesta} `,
-            historial: unicos,
-          });
-        }
-      }
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: 'hable con el administrador', err });
-  } */
 };
 
 

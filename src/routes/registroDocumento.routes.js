@@ -25,6 +25,16 @@ const storage = multer.diskStorage({
 });
 
 
+const storageDocFirm = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, `firmado_${file.originalname}` );
+  },
+});
+
+
 const  storageFirm = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads/firmas');
@@ -46,13 +56,14 @@ const  storageFirm = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const uploadFirm = multer({ storage: storageFirm });
+const uploadDocFirm = multer({storage: storageDocFirm})
 
 
 router.get('/regdoc', validarJWT, haveRol('ADMIN_ROLE'), lugarAll);
 router.get('/regdoc/:id', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarOne);
 router.post('/regdoc', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarAdd);
 router.post('/regdocAddAll', upload.array('file'), lugarAddAll);
-/* router.post('/regdocfirmAddAll', uploadFirm.array('file'), addAllFirm); */
+router.post('/regdocfirmAddAll', uploadDocFirm.array('file'), addAllFirm); 
 router.post('/subir_firma/:dni', uploadFirm.single('image'), uploadfile);
 router.post('/firmar_doc', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), firmarDoc);
 router.put('/regdoc/:id', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarUpdate);
