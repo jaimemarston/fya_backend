@@ -45,12 +45,15 @@ const addTipoDocOne = async (req = request, res = response) => {
 
 const getAllTipoDoc = async (req = request, res = response) => {
   try {
-
-   const result = await  RegistroTipoDocumento.findAll()
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+    const { rows:result, count } = await  RegistroTipoDocumento.findAndCountAll({      limit: pageSize,
+      offset,})
 
     res
     .status(201)
-    .json({ message: 'Se ha creado con éxito', result });
+    .json({ message: 'Se ha creado con éxito', result, count });
 
     
     
