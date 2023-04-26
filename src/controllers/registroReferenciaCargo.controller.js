@@ -43,8 +43,39 @@ const referenciaAddAll = async (req = request, res = response) => {
 };
 
 
+const referenciaAdd = async (req = request, res = response) => {
+  const {body} = req;
+  try {
+    console.log(body)
+    const codigoReferencias = await RegistroCodigoReferencia.create(body);
+    res
+      .status(200)
+      .json({ message: 'Lista de codigos de referencia', codigoReferencias:codigoReferencias});
+  } catch (error) {
+
+
+    return res.status(400).json({ message: 'Hable con el administrador', error });
+  }
+};
+
+const referenciaDelete = async (req = request, res = response) => {
+  const {id} = req.params;
+  try {
+    console.log(id)
+    const codigoReferencias = await RegistroCodigoReferencia.destroy({where:{id}});
+    res
+      .status(200)
+      .json({ message: 'codigo de referencia eliminado', codigoReferencias:codigoReferencias});
+  } catch (error) {
+
+
+    return res.status(400).json({ message: 'Hable con el administrador', error });
+  }
+};
 
 export {
   referenciaAll,
-  referenciaAddAll
+  referenciaAddAll,
+  referenciaAdd,
+  referenciaDelete
 };
