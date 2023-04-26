@@ -86,8 +86,8 @@ const regActividadUpdate = async (req = request, res = response) => {
     );
 
     res.json({
-      message: 'Lugar de comisión actualizado',
-      lugar: { ...body },
+      message: 'Registro de actividad actualizado',
+      registroActividad: { ...body },
     });
   } catch (err) {
     console.log(err);
