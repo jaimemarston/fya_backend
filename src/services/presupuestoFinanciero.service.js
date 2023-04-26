@@ -9,7 +9,7 @@ const importBudgets = async (filePath) => {
 
     // Eliminar la primera fila (encabezados de columna)
     rows.shift();
-    rows.shift();
+   
     
   
     // Crear un array de objetos para bulkCreate
