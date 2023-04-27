@@ -9,14 +9,35 @@ import {
 import { Op } from 'sequelize';
 
 const solicitudProductoAll = async (req = request, res = response) => {
-  const [producto, count] = await Promise.all([
-    SolicitudProducto.findAll(),
-    SolicitudProducto.count(),
-  ]);
+  try {
 
-  res
-    .status(200)
-    .json({ message: 'Lista de Productos', data: producto, count });
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+
+
+    const [producto, count] = await Promise.all([
+      SolicitudProducto.findAndCountAll({
+        order: ['id'],
+        where: { estado: true },
+        limit: pageSize,
+        offset
+
+      }),
+       SolicitudProducto.count({
+        where: { estado: true },
+      }), 
+    ]);
+  
+    res
+      .status(200)
+      .json({ message: 'Lista de Productos', data: producto, count });
+    
+  } catch (error) {
+    
+  }
+
+
 };
 
 const solicitudProductoAdd = async (req = request, res = response) => {
