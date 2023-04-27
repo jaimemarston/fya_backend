@@ -8,18 +8,22 @@ import {
 
 const solicitudAll = async (req = request, res = response) => {
   try {
-    const [datos, count] = await Promise.all([
-      Solicitud.findAll({
-        order: ['id'],
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+
+    const [rows, count] = await Promise.all([
+      Solicitud.findAndCountAll({
         where: { estado: true },
-        include: SolicitudProducto,
-      }),
-      Solicitud.count({ where: { estado: true } }),
+        limit: pageSize,
+        offset,
+        order: [['id', 'ASC']]
+      })
     ]);
 
     res
       .status(200)
-      .json({ message: 'Lista de usuarios', personal: datos, count });
+      .json({ message: 'Lista de usuarios', personal: rows, count });
   } catch (error) {
     res.status(400).json({ message: 'Hable con el administrador', error });
   }
