@@ -43,20 +43,21 @@ const rendGastosOne = async (req = request, res = response) => {
 
 const rendGastosAll = async (req = request, res = response) => {
   try {
-    const [rendicionGastos, count] = await Promise.all([
-      RendicionGastos.findAll({
-        order: ['id'],
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+
+    const [rows, count]  = await Promise.all([
+      RendicionGastos.findAndCountAll({
         where: { estado: true },
-      
-        
-      }),
-      RendicionGastos.count({
-        where: { estado: true },
-      }),
+        limit: pageSize,
+        offset,
+        order: [['id', 'ASC']]
+      })
     ]);
     res.status(200).json({
       message: 'Lista de rendición de gastos',
-      rendicionGastos,
+      rendicionGastos: rows,
       count,
     });
   } catch (err) {
