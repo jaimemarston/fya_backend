@@ -26,12 +26,20 @@ const addTipoDocOne = async (req = request, res = response) => {
   const {body} = req;
 
   try {
+
+    const existCode = await RegistroTipoDocumento.findOne({
+      where: { codigo: body.codigo },
+    });
+
+    if (existCode) {
+      return res.status(404).json({ message: 'El código ya existe' });
+    }
     
    const result = await  RegistroTipoDocumento.create({...body});
 
 
 
-  console.log('boidy', result)
+  
     res
     .status(201)
     .json({ message: 'Se ha creado con éxito', result });
