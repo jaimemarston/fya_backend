@@ -12,18 +12,16 @@ const solicitudAll = async (req = request, res = response) => {
     const pageSize = req?.query?.pageSize || 10;
     const offset = (page - 1) * pageSize;
 
-    const [rows, count] = await Promise.all([
-      Solicitud.findAndCountAll({
-        where: { estado: true },
-        limit: pageSize,
-        offset,
-        order: [['id', 'ASC']]
-      })
-    ]);
+    const [rows, count] = await Solicitud.findAndCountAll({
+      where: { estado: true },
+      limit: pageSize,
+      offset,
+      order: [['id', 'ASC']]
+    })
 
     res
       .status(200)
-      .json({ message: 'Lista de usuarios', personal: rows, count });
+      .json({ message: 'Lista de usuarios', personal: rows || [], count });
   } catch (error) {
     res.status(400).json({ message: 'Hable con el administrador', error });
   }
