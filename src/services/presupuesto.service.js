@@ -23,9 +23,10 @@ const importBudgets = async (filePath) => {
     return registro
   });
   
+  
   // Guardar los datos en la tabla
   const result = await registroPresupuesto.bulkCreate(data, {
-    ignoreDuplicates: true
+    ignoreDuplicates: true,
   });
 
   fs.unlinkSync(filePath);

@@ -2,7 +2,8 @@ import { Router } from 'express';
 import {
   referenciaAll,
   referenciaAddAll,
-  referenciaAdd,referenciaDelete
+  referenciaAdd,referenciaDelete,
+  referenciaUpdate
 } from '../controllers/registroReferenciaCargo.controller.js';
 import { validarJWT } from '../middleware/validar-jwt.js';
 import { haveRol } from '../middleware/validar-roles.js';
@@ -14,6 +15,9 @@ router.get('/registroReferenciaAll', referenciaAll);
 router.post('/registroReferenciaAddAll', validarJWT, haveRol('ADMIN_ROLE'), upload.single('file'), referenciaAddAll);
 
 router.post('/registroReferencia',validarJWT, haveRol('ADMIN_ROLE'), referenciaAdd)
+
+
+router.put('/registroReferenciaAll/:id',validarJWT, haveRol('ADMIN_ROLE'), referenciaUpdate);
 
 router.delete('/registroReferencia/:id',validarJWT, haveRol('ADMIN_ROLE'), referenciaDelete)
 

@@ -10,6 +10,7 @@ export const RegistroProyecto = sequelize.define('registroProyecto', {
   codigo: {
     type: DataTypes.STRING,
     primaryKey: true,
+
   },
   nombreAbreviado: {
     type: DataTypes.STRING,
