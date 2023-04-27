@@ -43,7 +43,7 @@ const registroPresupuestoAll = async (req = request, res = response) => {
 
 const registroPresupuestoAdd = async (req = request, res = response) => {
   const { body } = req;
-  // console.log(body);
+
   const { error } = validateRegistroPresupuesto(req.body);
   if (error) {
     const err = error.details[0].message;
@@ -80,9 +80,7 @@ try {
   console.error("ERROR IN registroPresupuestoAddAll",error);
   fs.unlinkSync(req.file.path);
 
-  return res.status(HttpStatus.BAD_REQUEST).json({
-    error
-  });
+  return res.status(HttpStatus.BAD_REQUEST).json({ message: 'Error en datos, puede que sea duplicado' });
 }
 };
 

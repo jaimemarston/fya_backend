@@ -26,6 +26,25 @@ const referenciaAll = async (req = request, res = response) => {
 };
 
 
+const referenciaUpdate = async (req = request, res = response) => {
+  try {
+  
+    const {body} = req;
+    const {id} = req.params;
+
+    const codigoReferencias= await RegistroCodigoReferencia.update({...body
+    },
+    {where:{id}});
+
+    res
+      .status(200)
+      .json({ message: 'Lista de codigos de referencia', codigoReferencias:codigoReferencias, succes: true });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
+
 const referenciaAddAll = async (req = request, res = response) => {
   try {
     const response = await codeReferencesService.importCodeReferences(req.file.path);
@@ -77,5 +96,6 @@ export {
   referenciaAll,
   referenciaAddAll,
   referenciaAdd,
-  referenciaDelete
+  referenciaDelete,
+  referenciaUpdate
 };
