@@ -12,6 +12,7 @@ export const RegistroTipoDocumento = sequelize.define(
     codigo: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique:true,
       primaryKey: true
     },
     nombre: {
