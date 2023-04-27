@@ -70,7 +70,7 @@ const registroPresupuestoAdd = async (req = request, res = response) => {
 
 const registroPresupuestoAddAll = async (req = request, res = response) => {
 try {
-  console.log(req.file.path)
+ 
 
     const response = await presupuesto.importBudgets(req.file.path);
     return res.status(HttpStatus.CREATED).json({
