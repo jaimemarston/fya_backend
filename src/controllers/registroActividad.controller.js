@@ -22,10 +22,19 @@ const regActividadOne = async (req = request, res = response) => {
 
 const regActividadAll = async (req = request, res = response) => {
   try {
-    const [registroActividad, count] = await Promise.all([
-      RegistroActividad.findAll({
+
+    const page = req?.query?.page || 1;
+    const pageSize = req?.query?.pageSize || 10;
+    const offset = (page - 1) * pageSize;
+
+
+    const [rows, count] = await Promise.all([
+      RegistroActividad.findAndCountAll({
         order: ['id'],
         where: { estado: true },
+        limit: pageSize,
+        offset
+
       }),
       RegistroActividad.count({
         where: { estado: true },
@@ -33,7 +42,7 @@ const regActividadAll = async (req = request, res = response) => {
     ]);
     res.status(200).json({
       message: 'Lista de lugares de comisión',
-      registroActividad,
+      registroActividad: rows,
       count,
     });
   } catch (err) {
