@@ -89,14 +89,14 @@ const comisionUpdate = async (req = request, res = response) => {
   const { body } = req;
   try {
     const lugarComision = await LugarComision.findByPk(id);
-    const existCode = await LugarComision.findOne({
+/*     const existCode = await LugarComision.findOne({
       where: { codigo: body.codigo },
     });
-
-    if (existCode) {
+ */
+/*     if (existCode) {
       return res.status(404).json({ message: 'El código ya existe' });
     }
-
+ */
     if (!lugarComision) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
