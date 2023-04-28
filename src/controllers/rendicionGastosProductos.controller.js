@@ -24,7 +24,22 @@ const rendGastosProductsAll = async (req = request, res = response) => {
   }
 };
 
-const rendGastosProductsOne = (req = request, res = response) => {};
+const rendGastosProductsOne = async (req = request, res = response) =>{
+ const {id} = req.params;
+  try {
+   
+    const rendicionGastosProduct = await  RendicionGastosProducto.findByPk(id)
+
+
+    res.status(200).json({
+      message: 'Lista de rendición de gastos',
+      rendicionGastosProduct: rendicionGastosProduct,
+     
+    });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
 
 const rendGastosProductsByRendicion = async (req = request, res = response) => {
 
