@@ -28,7 +28,9 @@ const rendGastosProductsOne = async (req = request, res = response) =>{
  const {id} = req.params;
   try {
    
-    const rendicionGastosProduct = await  RendicionGastosProducto.findByPk(id)
+    const rendicionGastosProduct = await  RendicionGastosProducto.findByPk(id )
+
+    rendicionGastosProduct.hola =' Hola'
 
 
     res.status(200).json({
