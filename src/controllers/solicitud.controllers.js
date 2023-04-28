@@ -12,7 +12,7 @@ const solicitudAll = async (req = request, res = response) => {
     const pageSize = req?.query?.pageSize || 10;
     const offset = (page - 1) * pageSize;
 
-    const [rows, count] = await Solicitud.findAndCountAll({
+    const {rows, count} = await Solicitud.findAndCountAll({
       where: { estado: true },
       limit: pageSize,
       offset,
