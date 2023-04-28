@@ -25,6 +25,59 @@ const referenciaAll = async (req = request, res = response) => {
   }
 };
 
+const referenciaOne = async (req = request, res = response) => {
+  try {
+    const {id} = req.params;
+
+  
+    const codigoReferencias = await RegistroCodigoReferencia.findOne({
+      where: { id: id },
+    });
+
+    
+
+    res
+      .status(200)
+      .json({ message: 'Lista de codigos de referencia', codigoReferencias:codigoReferencias });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
+const referenciaOneCode = async (req = request, res = response) => {
+  try {
+    const {codigo} = req.params;
+
+    console.log(codigo)
+    const codigoReferencias = await RegistroCodigoReferencia.findOne({
+      where: { codigo: '10040212154' },
+    });
+
+    
+
+    res
+      .status(200)
+      .json({ message: 'Lista de codigos de referencia', codigoReferencias:codigoReferencias });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
+const referencia = async (req = request, res = response) => {
+  try {
+
+    const {rows} = await RegistroCodigoReferencia.findAndCountAll()
+
+    console.log(rows)
+
+    res
+      .status(200)
+      .json({ message: 'Lista de codigos de referencia', codigoReferencias:rows });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
 
 const referenciaUpdate = async (req = request, res = response) => {
   try {
@@ -65,7 +118,7 @@ const referenciaAddAll = async (req = request, res = response) => {
 const referenciaAdd = async (req = request, res = response) => {
   const {body} = req;
   try {
-    console.log(body)
+
     const codigoReferencias = await RegistroCodigoReferencia.create(body);
     res
       .status(200)
@@ -97,5 +150,8 @@ export {
   referenciaAddAll,
   referenciaAdd,
   referenciaDelete,
-  referenciaUpdate
+  referenciaUpdate,
+  referencia,
+  referenciaOne,
+  referenciaOneCode
 };
