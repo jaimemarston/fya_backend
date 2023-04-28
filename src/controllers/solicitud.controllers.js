@@ -16,6 +16,7 @@ const solicitudAll = async (req = request, res = response) => {
       where: { estado: true },
       limit: pageSize,
       offset,
+      include: SolicitudProducto,
       order: [['id', 'ASC']]
     })
 
@@ -56,7 +57,7 @@ const solicitudOne = async (req = request, res = response) => {
     }),
   ]);
 
-  console.log(personal)
+
 
   if (!personal) {
     return res.status(404).json({ message: 'No existe el personal' });
@@ -65,6 +66,7 @@ const solicitudOne = async (req = request, res = response) => {
     ...personal,
   };
   dataValues.productos = producto;
+  dataValues.hola = 'cñl,,m'
 
   const suma = producto
     .map((item) => {
