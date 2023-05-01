@@ -9,12 +9,14 @@ import {
   regProyectoDelete,
   regProyectoOne,
   regProyectoUpdate,
-  regProyectoOneByName
+  regProyectoOneByName,
+  proyectoAll
 } from '../controllers/registroProyecto.controller.js';
 import { validarJWT, haveRol } from '../middleware/index.js';
 const router = Router();
 
 router.get('/regProyecto',validarJWT, haveRol('ADMIN_ROLE'), regProyectoAll);
+router.get('/regProyectoAll',validarJWT, haveRol('ADMIN_ROLE'), proyectoAll);
 router.get('/regProyecto/:id', validarJWT, haveRol('ADMIN_ROLE'), regProyectoOne);
 router.get('/regProyectos/:proyecto', validarJWT, haveRol('ADMIN_ROLE'), regProyectoOneByName);
 router.post('/regProyecto', validarJWT, haveRol('ADMIN_ROLE'), regProyectoAdd);
