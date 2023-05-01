@@ -6,7 +6,8 @@ import {
   referenciaUpdate,
   referencia,
   referenciaOne,
-  referenciaOneCode
+  referenciaOneCode,
+  referenciaOneRuc
 } from '../controllers/registroReferenciaCargo.controller.js';
 import { validarJWT } from '../middleware/validar-jwt.js';
 import { haveRol } from '../middleware/validar-roles.js';
@@ -16,7 +17,8 @@ const router = Router();
 
 router.get('/registroReferenciaAll', validarJWT, haveRol('ADMIN_ROLE'),  referenciaAll);
 router.get('/registroReferenciaAll/:id', validarJWT, haveRol('ADMIN_ROLE'),  referenciaOne);
-router.get('/registroReferencia/:codigo', validarJWT, haveRol('ADMIN_ROLE'),  referenciaOneCode);
+/* router.get('/registroReferencia/:codigo', validarJWT, haveRol('ADMIN_ROLE'),  referenciaOneCode); */
+router.get('/registroReferencia/:ruc', validarJWT, haveRol('ADMIN_ROLE'),  referenciaOneRuc);
 router.get('/registroReferencia', validarJWT, haveRol('ADMIN_ROLE'),  referencia);
 router.post('/registroReferenciaAddAll', validarJWT, haveRol('ADMIN_ROLE'), upload.single('file'), referenciaAddAll);
 

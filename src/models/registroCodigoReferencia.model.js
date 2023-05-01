@@ -19,7 +19,12 @@ export const RegistroCodigoReferencia = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
-    exoneracategoria: {
+    exonerar: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+
+    categoria: {
       type: DataTypes.STRING,
       allowNull: true
     },
