@@ -9,18 +9,18 @@ const router = Router();
 router.post('/registro-tipo-documento',  upload.single('file'), addTipoDoc );
 
 
-router.post('/registro-tipo-documento/one', validarJWT, haveRol('ADMIN_ROLE'),    addTipoDocOne );
+router.post('/registro-tipo-documento/one', validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),      addTipoDocOne );
 
-router.get('/tipo-documento',  validarJWT, haveRol('ADMIN_ROLE'), getAllTipoDoc );
+router.get('/tipo-documento',  validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),   getAllTipoDoc );
 
-router.put('/tipo-documento/:id',  validarJWT, haveRol('ADMIN_ROLE'), updateAllTipoDoc );
-
-
-router.get('/tipo-documento/:id',  validarJWT, haveRol('ADMIN_ROLE'), getOneTipoDoc );
+router.put('/tipo-documento/:id',  validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),   updateAllTipoDoc );
 
 
-router.get('/tipo-documento/tipo/:tipo',  validarJWT, haveRol('ADMIN_ROLE'), getOneTipoDocName );
+router.get('/tipo-documento/:id',  validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),   getOneTipoDoc );
 
-router.delete('/delete-tipo-documento/:id',  validarJWT, haveRol('ADMIN_ROLE'), deleteTipoDoc );
+
+router.get('/tipo-documento/tipo/:tipo',  validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),   getOneTipoDocName );
+
+router.delete('/delete-tipo-documento/:id',  validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),   deleteTipoDoc );
 
 export default router;

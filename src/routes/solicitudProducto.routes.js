@@ -8,13 +8,13 @@ import {
 import { validarJWT, haveRol } from '../middleware/index.js';
 const router = Router();
 
-router.get('/solicitudProducto', validarJWT, haveRol('ADMIN_ROLE'),  solicitudProductoAll);
+router.get('/solicitudProducto', validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),  solicitudProductoAll);
 
-router.post('/solicitudProducto', validarJWT, haveRol('ADMIN_ROLE'),  solicitudProductoAdd);
+router.post('/solicitudProducto', validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),  solicitudProductoAdd);
 
 
-router.put('/solicitudProducto/:id', validarJWT, haveRol('ADMIN_ROLE'),  solicitudProductoUpdate);
+router.put('/solicitudProducto/:id', validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),  solicitudProductoUpdate);
 
-router.delete('/solicitudProducto/:id', validarJWT, haveRol('ADMIN_ROLE'),  solicitudProductoDelete);
+router.delete('/solicitudProducto/:id', validarJWT, haveRol('ADMIN_ROLE','RESPONSABLE_ROLE'),  solicitudProductoDelete);
 
 export default router;

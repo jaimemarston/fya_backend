@@ -1,5 +1,5 @@
 import { request, response } from 'express';
-import { Usuario } from '../models/index.js';
+import { Usuario, registroEmpleado } from '../models/index.js';
 import bcryptjs from 'bcryptjs';
 import { validateUserSchema } from '../helpers/schemaUser.js';
 
@@ -12,6 +12,72 @@ const userAll = async (req = request, res = response) => {
   ]);
   res.status(200).json({ message: 'Lista de usuarios', usuario, count });
 };
+
+
+
+const userCreate = async (req = request, res = response) => {
+
+  const users = [{    codigo:"12345",
+  nombre:"Admin Role",
+  email:"admin@gmail.com",
+  password:"123456789",
+  rol:"ADMIN_ROLE",
+  estado:"true"},
+  {    codigo:"54321",
+  nombre:"Responsable",
+  email:"responsable@gmail.com",
+  password:"123456789",
+  rol:"RESPONSABLE_ROLE",
+  estado:"true"},
+  {    codigo:"98765",
+  nombre:"User",
+  email:"user@gmail.com",
+  dni:'10585940',
+  password:"123456789",
+  rol:"USER_ROLE",
+  estado:"true"},
+
+]
+const salt = bcryptjs.genSaltSync();
+
+  
+  try {
+
+    const dataUser =   users.map((element) => {
+
+      element.password = bcryptjs.hashSync(element.password, salt);
+
+    return element
+      
+    })
+    
+   
+    const usuarios = await Usuario.bulkCreate(dataUser, {
+      ignoreDuplicates: true
+    })
+
+    const empleado = await registroEmpleado.create(  {    codigo:"98765",
+    nombre:"User",
+    email:"user@gmail.com",
+    docIdentidad: '10585940',
+    ndocumento: '10585940',
+    phone:"04167871458",
+    cargo: 'usuario',
+    estado: true},)
+    
+
+
+
+    res.status(201).json({ message: 'Usuario creado con éxito', usuarios, empleado });
+  } catch (error) {
+    console.log('=>', error);
+    throw new Error(error);
+  }
+
+
+};
+
+
 
 const userOne = async (req = request, res = response) => {
   const { id } = req.params;
@@ -37,6 +103,8 @@ const userAdd = async (req = request, res = response) => {
     const err = error.details[0].message;
     return res.status(400).json({ message: err });
   }
+
+  
 
   try {
     const existEmail = await Usuario.findOne({
@@ -98,4 +166,4 @@ const userDelete = async (req = request, res = response) => {
   res.json({ message: 'Usuario eliminado', usuario, usuarioAutenticado });
 };
 
-export { userAll, userOne, userAdd, userUpdate, userDelete };
+export { userAll, userOne, userAdd, userUpdate, userDelete, userCreate };
