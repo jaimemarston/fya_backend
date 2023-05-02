@@ -35,7 +35,7 @@ export const Usuario = sequelize.define('usuarios', {
     type: DataTypes.STRING,
   },
   rol: {
-    type: DataTypes.ENUM(["ADMIN_ROLE", "USER_ROLE"]),
+    type: DataTypes.ENUM(["ADMIN_ROLE", "USER_ROLE", "RESPONSABLE_ROLE"]),
   },
   estado: {
     type: DataTypes.BOOLEAN,
