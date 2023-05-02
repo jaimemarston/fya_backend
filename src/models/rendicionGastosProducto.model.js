@@ -25,7 +25,7 @@ export const RendicionGastosProducto = sequelize.define(
       type: DataTypes.INTEGER,
     },
     ruc: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     descripcion: {
       type: DataTypes.STRING,

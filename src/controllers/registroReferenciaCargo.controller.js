@@ -50,11 +50,32 @@ const referenciaOneCode = async (req = request, res = response) => {
 
     console.log(codigo)
     const codigoReferencias = await RegistroCodigoReferencia.findOne({
-      where: { codigo: '10040212154' },
+      where: { codigo: codigo },
     });
 
     
 
+    res
+      .status(200)
+      .json({ message: 'Lista de codigos de referencia', codigoReferencias:codigoReferencias });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
+
+const referenciaOneRuc = async (req = request, res = response) => {
+  try {
+    const {ruc} = req.params;
+
+
+
+
+    const codigoReferencias = await RegistroCodigoReferencia.findOne({
+      where: { ruc: ruc },
+    });
+
+  console.log(codigoReferencias,'DATAAAAAAAAAA')
     res
       .status(200)
       .json({ message: 'Lista de codigos de referencia', codigoReferencias:codigoReferencias });
@@ -153,5 +174,6 @@ export {
   referenciaUpdate,
   referencia,
   referenciaOne,
-  referenciaOneCode
+  referenciaOneCode,
+  referenciaOneRuc
 };

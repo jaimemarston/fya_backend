@@ -63,7 +63,22 @@ const regProyectoAll = async (req = request, res = response) => {
 
 
 
+const proyectoAll = async (req = request, res = response) => {
+  try {
 
+    const { rows:registroProyecto } = await RegistroProyecto.findAndCountAll({
+      where: { estado: true },
+
+   
+    });
+
+    res
+      .status(200)
+      .json({ message: 'Lista de proyectos', registroProyecto: registroProyecto || [] });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
 
 
 
@@ -188,5 +203,6 @@ export {
   regProyectoUpdate,
   regProyectoDelete,
   regProyectoBlockDelete,
-  regProyectoOneByName
+  regProyectoOneByName,
+  proyectoAll
 };
