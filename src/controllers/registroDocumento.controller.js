@@ -1,6 +1,6 @@
 import { request, response } from 'express';
 import { validateRegistroDocumento } from '../helpers/schemaRegistroDocumento.js';
-import { RegistroDocumento, Usuario } from '../models/index.js';
+import { RegistroDocumento, Usuario, registroEmpleado } from '../models/index.js';
 import fs from "fs";
 import multer from "multer";
 import {PDFDocument}  from 'pdf-lib';
@@ -100,10 +100,23 @@ const lugarAddAll = async (req = request, res = response) => {
     return doc
   } )
 
-  console.log(documentsData)
 
-  const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
-    ignoreDuplicates: true
+const empleado = await registroEmpleado.findAll();
+
+
+
+
+
+const documentosValidos = documentsData.filter((documento) =>
+empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
+);
+
+console.log(documentosValidos)
+
+  const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
+    updateOnDuplicate: [ 'nombredoc', 'tipodoc', 'ndocumento'],
+    upsert: true
+    
   })
 
   res
@@ -111,7 +124,8 @@ const lugarAddAll = async (req = request, res = response) => {
   .json({ message: 'Se ha subido con éxito', regDoc });
     
   } catch (error) {
-    res.status(400).json({ message: 'hable con el administrador', err });
+    res.status(400).json({ message: 'hable con el administrador', error });
+
   }
   
 /*   let historial = [];
