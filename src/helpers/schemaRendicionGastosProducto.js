@@ -87,24 +87,8 @@ const schemaRendicionGastosProducto = Joi.object({
       });
       return errors;
     }),
-  ruc: Joi.number()
-    .required()
-    .positive()
-    .integer()
-    .error((errors) => {
-      errors.forEach((data) => {
-        if (data.code === 'any.required') {
-          data.message = 'El RUC es requerido';
-        }
-        if (data.code === 'string.empty') {
-          data.message = 'El RUC no debe estar vació';
-        }
-        if (data.code === 'number.positive') {
-          data.message = 'Ingrese números positivos';
-        }
-      });
-      return errors;
-    }),
+  ruc: Joi.string()
+    .required(),
   descripcion: Joi.string()
     .required()
     .error((errors) => {

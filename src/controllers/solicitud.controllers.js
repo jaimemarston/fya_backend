@@ -17,7 +17,7 @@ const solicitudAll = async (req = request, res = response) => {
       limit: pageSize,
       offset,
       include: SolicitudProducto,
-      order: [['id', 'ASC']]
+      order: [['id', 'DESC']],
     })
 
     res
