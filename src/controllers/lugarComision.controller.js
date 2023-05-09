@@ -43,6 +43,21 @@ const comisionAll = async (req = request, res = response) => {
   }
 };
 
+const comision = async (req = request, res = response) => {
+  try {
+
+    const { rows:comisiones, count } = await LugarComision.findAndCountAll({
+      order: [['id', 'DESC']],
+    });
+
+    res
+      .status(200)
+      .json({ message: 'Lista de cargos', comisiones: comisiones || [], count });
+  } catch (err) {
+    return res.status(400).json({ message: 'Hable con el administrador', err });
+  }
+};
+
 const comisionAdd = async (req = request, res = response) => {
   const { body } = req;
   const { error } = validateLugarSolicitud(req.body);
@@ -127,7 +142,7 @@ const comisionDelete = async (req = request, res = response) => {
     if (!lugarComision) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
-    await lugarComision.update({ estado: false });
+    await lugarComision.destroy();
     res.status(200).json({ message: 'Se elimino con éxito', lugarComision });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
@@ -160,4 +175,5 @@ export {
   comisionUpdate,
   comisionDelete,
   comisionBlockDelete,
+  comision
 };
