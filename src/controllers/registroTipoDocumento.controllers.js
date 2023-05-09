@@ -57,6 +57,7 @@ const getAllTipoDoc = async (req = request, res = response) => {
     const pageSize = req?.query?.pageSize || 10;
     const offset = (page - 1) * pageSize;
     const { rows:result, count } = await  RegistroTipoDocumento.findAndCountAll({  limit: pageSize,
+      order: [['id', 'DESC']],
       offset,})
 
     res

@@ -30,7 +30,7 @@ const regActividadAll = async (req = request, res = response) => {
 
     const [rows, count] = await Promise.all([
       RegistroActividad.findAndCountAll({
-        order: ['id'],
+        order: [['id', 'DESC']],
         where: { estado: true },
         limit: pageSize,
         offset

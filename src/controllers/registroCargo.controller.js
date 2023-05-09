@@ -33,8 +33,9 @@ const cargoAll = async (req = request, res = response) => {
     const { rows:registroCargo, count } = await RegistroCargo.findAndCountAll({
       where: { estado: true },
       limit: pageSize,
+      
       offset,
-      order: [['id', 'ASC']]
+      order: [['id', 'DESC']],
     });
 
     res
@@ -91,14 +92,14 @@ const cargoUpdate = async (req = request, res = response) => {
   const { body } = req;
   try {
     const registroCargo = await RegistroCargo.findByPk(id);
-    const existCode = await RegistroCargo.findOne({
+/*     const existCode = await RegistroCargo.findOne({
       where: { codigo: body.codigo },
     });
 
     if (existCode) {
       return res.status(404).json({ message: 'El código ya existe' });
     }
-
+ */
     if (!registroCargo) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }

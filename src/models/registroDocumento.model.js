@@ -52,6 +52,15 @@ nomfile: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
+}, {
+  tableName: 'registroDocumentos',
+  indexes: [
+    {
+      unique: true,
+      fields: ['nombredoc', 'tipodoc', 'ndocumento']
+    }
+  ]
+
 });
 
 /* RegistroDocumento.belongsTo(registroEmpleado, { foreignKey: 'ndocumento' }); */

@@ -32,7 +32,7 @@ const comisionAll = async (req = request, res = response) => {
       where: { estado: true },
       limit: pageSize,
       offset,
-      order: [['id', 'ASC']]
+      order: [['id', 'DESC']],
     });
 
     res

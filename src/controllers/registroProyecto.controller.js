@@ -48,6 +48,7 @@ const regProyectoAll = async (req = request, res = response) => {
     const offset = (page - 1) * pageSize;
     const { rows:registroProyecto, count } = await RegistroProyecto.findAndCountAll({
       where: { estado: true },
+      order: [['id', 'DESC']],
       limit: pageSize,
       offset,
    
