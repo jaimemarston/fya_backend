@@ -130,7 +130,7 @@ const cargoDelete = async (req = request, res = response) => {
     if (!registroCargo) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
-    await registroCargo.update({ estado: false });
+    await registroCargo.destroy();
     res.status(200).json({ message: 'Se elimino con éxito', registroCargo });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
