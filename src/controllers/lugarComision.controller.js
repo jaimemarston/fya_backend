@@ -1,9 +1,10 @@
 import { request, response } from 'express';
 import { validateLugarSolicitud } from '../helpers/lugarSolicitud.js';
-import { LugarComision } from '../models/index.js';
+import { LugarComision, Solicitud } from '../models/index.js';
 import placeCommisionService from '../services/placesCommission.service.js';
 import { HttpStatus } from '../utils/status.utils.js';
 import fs from "fs";
+import { CONNREFUSED } from 'dns';
 
 const comisionOne = async (req = request, res = response) => {
   const { id } = req.params;
@@ -139,11 +140,21 @@ const comisionDelete = async (req = request, res = response) => {
   const { id } = req.params;
   try {
     const lugarComision = await LugarComision.findByPk(id);
+    
     if (!lugarComision) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
+
+   
+
+    const count = await Solicitud.count({where: {lugarComision: id}});
+
+    if (count > 0) {
+      return res.status(400).json({ message: 'No se puede eliminar la comision  porque tiene solicitudes asociadas.' });
+     
+    } 
     await lugarComision.destroy();
-    res.status(200).json({ message: 'Se elimino con éxito', lugarComision });
+   return  res.status(200).json({ message: 'Se elimino con éxito' });
   } catch (err) {
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
