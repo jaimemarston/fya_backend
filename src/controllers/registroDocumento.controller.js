@@ -111,7 +111,7 @@ const documentosValidos = documentsData.filter((documento) =>
 empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
 );
 
-console.log(documentosValidos)
+
 
   const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
     updateOnDuplicate: [ 'nombredoc', 'tipodoc', 'ndocumento'],
@@ -188,14 +188,26 @@ const addAllFirm = async (req = request, res = response) => {
     const files = req.files
 
     const documentsData = files.map((docData) => {
-      const doc = {
-        tipodoc: docData.originalname.split("_")[0],
-        nombredoc:docData.originalname,
-        ndocumento: docData.originalname.split("_")[1],
-        estado: true
-  
+      if(docData.originalname.split("_")[0] === 'firmado'){
+        const doc = {
+          tipodoc: docData.originalname.split("_")[1],
+          nombredoc:docData.originalname.replace('firmado_', ''),
+          ndocumento: docData.originalname.split("_")[2],
+          estado: true
+    
+        }
+        return doc
+      }else {
+        const doc = {
+          tipodoc: docData.originalname.split("_")[0],
+          nombredoc:docData.originalname,
+          ndocumento: docData.originalname.split("_")[1],
+          estado: true
+    
+        }
+        return doc
       }
-      return doc
+
     } )
 
   console.log(documentsData)
@@ -209,7 +221,7 @@ const addAllFirm = async (req = request, res = response) => {
   .json({ message: 'Se ha subido con éxito', regDoc });
     
   } catch (error) {
-    res.status(400).json({ message: 'hable con el administrador', err });
+    res.status(400).json({ message: 'hable con el administrador', error });
   }
   
 

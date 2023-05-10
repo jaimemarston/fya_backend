@@ -30,7 +30,10 @@ const storageDocFirm = multer.diskStorage({
     cb(null, 'public/uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, `firmado_${file.originalname}` );
+
+    const verfie = file.originalname.split('_')
+    const name = verfie[0] === 'firmado' ? '' : 'firmado_'
+    cb(null, `${name}${file.originalname}` );
   },
 });
 

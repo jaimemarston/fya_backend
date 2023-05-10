@@ -4,6 +4,7 @@ import {
   RegistroProyecto,
   Solicitud,
   SolicitudProducto,
+
 } from '../models/index.js';
 
 const solicitudAll = async (req = request, res = response) => {
@@ -16,7 +17,12 @@ const solicitudAll = async (req = request, res = response) => {
       where: { estado: true },
       limit: pageSize,
       offset,
-      include: SolicitudProducto,
+      include: [
+       
+           RegistroProyecto,
+           SolicitudProducto
+       
+      ],
       order: [['id', 'DESC']],
     })
 

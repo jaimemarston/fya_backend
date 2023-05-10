@@ -1,6 +1,6 @@
 import { request, response } from 'express';
 import { validateRegistroProyecto } from '../helpers/schemaRegistroProyecto.js';
-import { RegistroProyecto } from "../models/index.js";
+import { RegistroProyecto, Solicitud } from "../models/index.js";
 import { HttpStatus } from '../utils/status.utils.js';
 import projectService from '../services/project.service.js';
 import fs from "fs";
@@ -171,9 +171,21 @@ const regProyectoDelete = async (req = request, res = response) => {
     if (!registroProyecto) {
       return res.status(404).json({ message: 'El dato ingresado no existe' });
     }
-    await registroProyecto.update({ estado: false });
-    res.status(200).json({ message: 'Se elimino con éxito', registroProyecto });
+    
+   
+  const count = await Solicitud.count({ where: { registroProyectoId: registroProyecto.id } });
+  if (count > 0) {
+
+  
+    return res.status(400).json({ message: 'No se puede eliminar el proyecto porque tiene solicitudes asociadas.' });
+   
+  } 
+    await registroProyecto.destroy()
+  
+
+  return  res.status(200).json({ message: 'Se elimino con éxito', registroProyecto }); 
   } catch (err) {
+   
     return res.status(400).json({ message: 'Hable con el administrador', err });
   }
 };
