@@ -154,23 +154,31 @@ const solicitudAdd = async (req = request, res = response) => {
 const solicitudUpdate = async (req = request, res = response) => {
   const { id } = req.params;
   const { body } = req;
+  try {
+    const personal = await Solicitud.findByPk(id);
 
-  const personal = await Solicitud.findByPk(id);
+    if (!personal) {
+      return res.status(404).json({ message: 'No existe el personal' });
+    }
+  
+    await Solicitud.update(
+      { ...body },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+  
+   return  res.json({ message: 'Personal actualizado', personal: { ...body } });
+    
+  } catch (error) {
 
-  if (!personal) {
-    return res.status(404).json({ message: 'No existe el personal' });
+    return  res.json({ message: 'Ha surgido un problema', error });
+    
   }
 
-  await Solicitud.update(
-    { ...body },
-    {
-      where: {
-        id,
-      },
-    }
-  );
 
-  res.json({ message: 'Personal actualizado', personal: { ...body } });
 };
 
 const solicitudDelete = async (req = request, res = response) => {
