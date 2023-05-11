@@ -41,6 +41,38 @@ const getEmpleado = async (req = request, res = response) => {
 
 };
 
+const getEmpleadoState = async (req = request, res = response) => {
+
+  const {estado} = req.params;
+  let whereEstado = {};
+
+  if (estado === 'activo') {
+    whereEstado.estado = true;
+  } else if (estado === 'inactivo') {
+    whereEstado.estado = false;
+  }
+
+
+  try {
+
+    const registroEmpleados = await registroEmpleado.findAll({
+      where:whereEstado,
+      include: [
+        {
+          model: RegistroDocumento
+        }
+      ]
+    })
+    res
+    .status(201)
+    .json({ message: 'Se han encontrado empleados con éxito', registroEmpleados });
+    
+  } catch (error) {
+    res.status(400).json({ message: 'hable con el administrador', error });
+  }
+
+};
+
 const getEmpleadoByDni = async (req = request, res = response) => {
   const dni = req.params.dni;
   console.log(dni)
@@ -84,5 +116,6 @@ export {
   addEmpleado,
   getEmpleado,
   deleteEmpleado,
-  getEmpleadoByDni
+  getEmpleadoByDni,
+  getEmpleadoState
 };
