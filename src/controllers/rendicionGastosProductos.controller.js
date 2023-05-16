@@ -65,10 +65,10 @@ try {
 };
 
 const rendGastosProductsAdd = async (req = request, res = response) => {
-  // console.log(req.body);
+  
   const { body } = req;
 
-  console.log(body)
+ 
 
   const { error } = validateRendicionProductSchema(req.body);
   if (error) {

@@ -1,5 +1,5 @@
 import { request, response } from 'express';
-import {  RegistroTipoDocumento } from '../models/index.js';
+import {  RegistroTipoDocumento,RendicionGastosProducto } from '../models/index.js';
 import  importTipoDocService from "../services/tipoDocumento.service.js";
 
 
@@ -46,7 +46,7 @@ const addTipoDocOne = async (req = request, res = response) => {
  
     
   } catch (error) {
-    res.status(400).json({ message: 'hable con el administrador', error });
+    res.status(400).json({ message: 'hable', error });
   }
 
 };
@@ -72,6 +72,24 @@ const getAllTipoDoc = async (req = request, res = response) => {
 
 };
 
+const getAll = async (req = request, res = response) => {
+  try {
+
+    const { rows:result, count } = await  RegistroTipoDocumento.findAndCountAll({
+      order: [['id', 'DESC']],
+     })
+
+    res
+    .status(201)
+    .json({ message: 'Se ha creado con éxito', result, count });
+
+    
+    
+  } catch (error) {
+    res.status(400).json({ message: 'hable con el administrador', error });
+  }
+
+};
 
 
 const updateAllTipoDoc = async (req = request, res = response) => {
@@ -137,9 +155,19 @@ const deleteTipoDoc = async (req = request, res = response) => {
   try {
 
     const id = req.params.id
+
+    const count = await RendicionGastosProducto.count({where: {tipo: id}});
+    const result = await  RegistroTipoDocumento.findAll()
+    if (count > 0) {
+      return res.status(400).json({ message: 'No se puede eliminar el tipo  porque tiene rendicion de gastos  asociadas.' });
+     
+    } 
+
    const deleteTipoDoc = await  RegistroTipoDocumento.destroy({where: {id}})
 
-   const result = await  RegistroTipoDocumento.findAll()
+   
+
+   
 
     res
     .status(201)
@@ -157,4 +185,4 @@ const deleteTipoDoc = async (req = request, res = response) => {
 
 
 
-export { addTipoDoc, getAllTipoDoc, deleteTipoDoc, getOneTipoDoc,getOneTipoDocName, addTipoDocOne, updateAllTipoDoc };
+export { addTipoDoc, getAllTipoDoc, deleteTipoDoc, getOneTipoDoc,getOneTipoDocName, addTipoDocOne, updateAllTipoDoc, getAll };
