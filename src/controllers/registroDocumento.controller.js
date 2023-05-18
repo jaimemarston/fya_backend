@@ -91,11 +91,21 @@ const lugarAddAll = async (req = request, res = response) => {
     const files = req.files
 
   const documentsData = files.map((docData) => {
+    const fechaBoleta = docData.originalname.split('_')[2].split('.')[0];
+    const year = fechaBoleta.slice(0, 4);
+    const month = fechaBoleta.slice(4, 6);
+    const day = "01"; 
+    const date = new Date(year, parseInt(month) - 1, day);
+    let fechaEnvio = date.toLocaleDateString("es-ES").replace(/\//g, '-');
+    fechaEnvio = fechaEnvio.split('-').map(part => part.padStart(2, '0')).join('-');
+
+
     const doc = {
       tipodoc: docData.originalname.split("_")[0],
       nombredoc:docData.originalname,
-      ndocumento: docData.originalname.split("_")[1]
-
+      ndocumento: docData.originalname.split("_")[1],
+      fechaenvio: fechaEnvio
+     
     }
     return doc
   } )
@@ -189,19 +199,37 @@ const addAllFirm = async (req = request, res = response) => {
 
     const documentsData = files.map((docData) => {
       if(docData.originalname.split("_")[0] === 'firmado'){
+        const fechaBoleta = docData.originalname.split('_')[3].split('.')[0];
+        const year = fechaBoleta.slice(0, 4);
+        const month = fechaBoleta.slice(4, 6);
+        const day = "01"; 
+        const date = new Date(year, parseInt(month) - 1, day);
+        let fechaEnvio = date.toLocaleDateString("es-ES").replace(/\//g, '-');
+        fechaEnvio = fechaEnvio.split('-').map(part => part.padStart(2, '0')).join('-');
         const doc = {
           tipodoc: docData.originalname.split("_")[1],
           nombredoc:docData.originalname.replace('firmado_', ''),
           ndocumento: docData.originalname.split("_")[2],
+          fechaenvio: fechaEnvio,
+          fechafirma: fechaEnvio,
           estado: true
     
         }
         return doc
       }else {
+        const fechaBoleta = docData.originalname.split('_')[2].split('.')[0];
+        const year = fechaBoleta.slice(0, 4);
+        const month = fechaBoleta.slice(4, 6);
+        const day = "01"; 
+        const date = new Date(year, parseInt(month) - 1, day);
+        let fechaEnvio = date.toLocaleDateString("es-ES").replace(/\//g, '-');
+        fechaEnvio = fechaEnvio.split('-').map(part => part.padStart(2, '0')).join('-');
         const doc = {
           tipodoc: docData.originalname.split("_")[0],
           nombredoc:docData.originalname,
           ndocumento: docData.originalname.split("_")[1],
+          fechaenvio: fechaEnvio,
+          fechafirma: fechaEnvio,
           estado: true
     
         }
@@ -231,9 +259,6 @@ const addAllFirm = async (req = request, res = response) => {
 const firmarDoc = async (req,res,next) => {
   const {user,doc} = req.body
 
-
-
-  
 try {
   const pdfBytes =   fs.readFileSync(process.cwd() + `/public/uploads/${doc.nombredoc}`);
   const pdfDoc = await PDFDocument.load(pdfBytes);    // Encuentra las coordenadas donde se colocará la imagen de la firma
@@ -274,7 +299,7 @@ const fecha = new Date();
 const anio = fecha.getFullYear();
 const mes = fecha.getMonth() + 1;
 const dia = fecha.getDate();
-const fechaPlana = `${anio}-${mes.toString().padStart(2, '0')}-${dia.toString().padStart(2, '0')}`;
+const fechaPlana = `${dia.toString().padStart(2, '0')}-${mes.toString().padStart(2, '0')}-${anio}`;
 const documento = await RegistroDocumento.findOne({where:{id:doc.id}})
  await documento.update({estado:true, fechafirma: fechaPlana})
  res.status(200).send({ message: 'Firmado Correctamente', newdoc: documento});
