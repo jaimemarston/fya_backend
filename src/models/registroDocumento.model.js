@@ -40,8 +40,8 @@ nomfile: {
     type: DataTypes.STRING,
   },
   fechaenvio: {
-    type: DataTypes.DATEONLY,
-    defaultValue: sequelize.literal('CURRENT_DATE'),
+    type: DataTypes.STRING,
+  
   },
   
   fechadoc: {
