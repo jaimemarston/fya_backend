@@ -404,7 +404,16 @@ const addAllFirm = async (req = request, res = response) => {
     } )
 
   console.log(documentsData)
-  const regDoc = await RegistroDocumento.bulkCreate(documentsData, {
+
+  const empleado = await registroEmpleado.findAll();
+
+
+
+const documentosValidos = documentsData.filter((documento) =>
+empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
+);
+
+  const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
     ignoreDuplicates: true
   })
 
