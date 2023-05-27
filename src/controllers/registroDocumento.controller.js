@@ -4,7 +4,10 @@ import { RegistroDocumento, Usuario, registroEmpleado } from '../models/index.js
 import fs from "fs";
 import multer from "multer";
 import {PDFDocument}  from 'pdf-lib';
+const carpeta = '../../../public/uploads';
+import {  Sequelize } from "sequelize";
 
+import path from "path";
 
 
 const storage = multer.diskStorage({
@@ -15,6 +18,168 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   },
 });
+
+const getBoletasMay = async (req = request, res = response) => {
+  try {
+    const rowsUsers = await RegistroDocumento.findAll({
+      where: Sequelize.literal("TO_DATE(fechaenvio, 'DD-MM-YYYY') >= DATE '2023-04-01' AND TO_DATE(fechaenvio, 'DD-MM-YYYY') < DATE '2023-05-01'"),
+    });
+
+      for (const row of rowsUsers) {
+      await Document.update(
+        { estado: false, fechafirma: null },
+        { where: { id: row.id } }
+      );
+    }
+
+    const carpeta = './public/uploads';
+    const prefijo = 'firmado';
+    const sufijo = '202304.pdf';
+
+    const getBoletasMayByBoleta = async () => {
+      try {
+        const rowsUsers = await RegistroDocumento.findAll();
+    
+        const data = rowsUsers.filter((res) => {
+          const boletaName = res.nombredoc.split('_')[2].split('.')[0];
+          return boletaName === '202304';
+        });
+    
+        for (const row of data) {
+          await RegistroDocumento.update(
+            { estado: false, fechafirma: null },
+            { where: { id: row.id } }
+          );
+        }
+    
+        console.log('Registros actualizados correctamente.', data);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+
+   
+
+    const eliminarDocumentosPorPatron = (carpeta, prefijo, sufijo) => {
+      
+      fs.readdir(carpeta, (error, archivos) => {
+        if (error) {
+          console.error('Error al leer la carpeta:', error);
+          return;
+        }
+    
+        archivos.forEach((archivo) => {
+          if (archivo.startsWith(prefijo) && archivo.endsWith(sufijo)) {
+            const rutaArchivo = path.join(carpeta, archivo);
+            fs.unlink(rutaArchivo, (error) => {
+              if (error) {
+                console.error('Error al eliminar el archivo:', archivo, error);
+              } else {
+                console.log('Archivo eliminado:', archivo);
+              }
+            });
+          }
+        });
+      });
+    };
+
+    const getBoletas2022 = async () => {
+      try {
+        const rowsUsers = await RegistroDocumento.findAll({
+          where: Sequelize.literal("TO_DATE(fechaenvio, 'DD-MM-YYYY') >= DATE '2021-01-01' AND TO_DATE(fechaenvio, 'DD-MM-YYYY') < DATE '2023-01-01'"),
+        });
+    
+        for (const row of rowsUsers) {
+          await RegistroDocumento.destroy({ where: { id: row.id } });
+        }
+    
+        console.log('Registros eliminados correctamente.', rowsUsers);
+        return rowsUsers
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+
+    const eliminarDocumentosPorPatron2022 = (carpeta) => {
+      fs.readdir(carpeta, (error, archivos) => {
+        if (error) {
+          console.error('Error al leer la carpeta:', error);
+          return;
+        }
+    
+        archivos.forEach((archivo) => {
+          if (
+            (archivo.startsWith('Boleta') || archivo.startsWith('firmado_')) &&
+            (archivo.includes('2022') || archivo.includes('2021'))
+          ) {
+            const rutaArchivo = path.join(carpeta, archivo);
+            fs.unlink(rutaArchivo, (error) => {
+              if (error) {
+                console.error('Error al eliminar el archivo:', archivo, error);
+              } else {
+                console.log('Archivo eliminado:', archivo);
+              }
+            });
+          }
+        });
+      });
+    };
+
+
+     getBoletasMayByBoleta() 
+     eliminarDocumentosPorPatron(carpeta,prefijo, sufijo) 
+     getBoletas2022()
+     eliminarDocumentosPorPatron2022(carpeta)
+ 
+
+    res.status(200).json('Exito')
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+const setFirmas = async(req = request, res = response) => {
+  const carpeta = './public/uploads/firmas';
+  fs.readdir(carpeta, (error, archivos) => {
+    if (error) {
+      console.error('Error al leer la carpeta:', error);
+      return;
+    }
+
+    archivos.forEach(async (archivo) => {
+
+
+
+      const dni1 = archivo.split('_')[1]
+      if(!dni1)return
+      const dni = dni1.split('.')[0]
+      const firma = archivo.split('.')[0]
+
+      const usuario = await Usuario.findOne({where: {dni: dni}})
+      if (!usuario) {
+        return ;
+      }
+
+      await Usuario.update(
+        { imgfirma: firma},
+        {
+          where: {
+            dni: dni
+          },
+        }
+      );
+
+      console.log(dni, firma)
+      console.log(usuario)
+
+
+    });
+  });
+res.status(200).json('Exito')
+}
+
 
 const upload = multer({ storage: storage });
 
@@ -430,6 +595,8 @@ const lugarBlockDelete = (req = request, res = response) => {
   }
 };
 
+
+
 export {
   lugarOne,
   lugarAll,
@@ -440,5 +607,7 @@ export {
   lugarAddAll,
   addAllFirm,
   uploadfile,
-  firmarDoc
+  firmarDoc,
+  getBoletasMay,
+  setFirmas
 };
