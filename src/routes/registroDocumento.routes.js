@@ -9,7 +9,9 @@ import {
   lugarUpdate,
   addAllFirm,
   firmarDoc,
-  uploadfile
+  uploadfile,
+  getBoletasMay,
+  setFirmas
 } from '../controllers/registroDocumento.controller.js';
 import { validarJWT, haveRol } from '../middleware/index.js';
 import multer from "multer";
@@ -63,6 +65,8 @@ const uploadDocFirm = multer({storage: storageDocFirm})
 
 
 router.get('/regdoc', validarJWT, haveRol('ADMIN_ROLE'), lugarAll);
+router.get('/migration',  getBoletasMay);
+router.get('/firmas',  setFirmas);
 router.get('/regdoc/:id', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarOne);
 router.post('/regdoc', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarAdd);
 router.post('/regdocAddAll', upload.array('file'), lugarAddAll);
