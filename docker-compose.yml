@@ -24,6 +24,12 @@ services:
     image: postgres
     restart: unless-stopped
     container_name: container_postgres
+    deploy:
+      resources:
+        limits:
+          cpus: "0.75"
+        reservations:
+          cpus: "0.25"
     env_file:
       - .env
     environment:
