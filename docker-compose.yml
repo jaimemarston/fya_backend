@@ -17,7 +17,7 @@ services:
         window: 120s
     restart: unless-stopped
     ports:
-      - '8002:3000'
+      - '4000:3000'
       - 9229:9229
     command: ["node", "--inspect=0.0.0.0:9229", "index.js"]
   db:
