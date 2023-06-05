@@ -87,6 +87,8 @@ class Server {
   listen() {
     this.app.listen(this.port, () => {
       console.log(`========= Conectado al servidor =========`);
+
+      console.log(`========= En el puerto =========`, 4000);
     });
   }
 }
