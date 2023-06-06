@@ -413,10 +413,11 @@ const documentosValidos = documentsData.filter((documento) =>
 empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
 );
 
-  const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
-    ignoreDuplicates: true
-  })
-
+const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
+  updateOnDuplicate: ['nombredoc', 'tipodoc', 'ndocumento', 'fechafirma', 'estado'],
+  upsert: true,
+  fields: ['nombredoc', 'tipodoc', 'ndocumento', 'fechafirma', 'estado'] // Los campos relevantes
+});
 
   res
   .status(201)
