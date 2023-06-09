@@ -77,6 +77,23 @@ const salt = bcryptjs.genSaltSync();
 
 };
 
+const updatePassword = async ( req = request, res = response) => {
+  const salt = bcryptjs.genSaltSync();
+  const body = req.body;
+
+  body.password = bcryptjs.hashSync(body.password, salt);
+
+  /* const userUpdate = await Usuario.findOne({where:{email: body.email}}) */
+
+
+  const newPassword = await Usuario.update({password: body.password}, {where:{id: body.id}})
+
+
+  res.status(201).json({ message: 'Contraseña actualizada con exito'});
+
+
+}
+
 
 
 const userOne = async (req = request, res = response) => {
@@ -166,4 +183,4 @@ const userDelete = async (req = request, res = response) => {
   res.json({ message: 'Usuario eliminado', usuario, usuarioAutenticado });
 };
 
-export { userAll, userOne, userAdd, userUpdate, userDelete, userCreate };
+export { userAll, userOne, userAdd, userUpdate, userDelete, userCreate, updatePassword };

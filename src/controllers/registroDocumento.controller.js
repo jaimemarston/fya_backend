@@ -443,16 +443,16 @@ try {
   const y = height / 2; */
 
   // Agrega la imagen como un sello en la página
-  const imageBytes = fs.readFileSync(process.cwd() + `/public/uploads/firmas/${user.imgfirma}.jpg`);
+  const imageBytes = fs.readFileSync(process.cwd() + `/public/uploads/firmas/${user?.imgfirma}.jpg`);
 
   const image = await pdfDoc.embedJpg(imageBytes);
   page.drawImage(image, {
 /*       x: x - image.width / 2, // Ajusta la posición de la imagen
     y: y - image.height / 2, */
     x: 70,
-    y: 60 ,
-    width: 50,
-    height: 50,
+    y: 65 ,
+    width: 45,
+    height: 45,
   });
 
  const newPdf = await  pdfDoc.save()    

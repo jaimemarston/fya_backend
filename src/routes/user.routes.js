@@ -6,7 +6,8 @@ import {
   userDelete,
   userOne,
   userUpdate,
-  userCreate
+  userCreate,
+  updatePassword
 } from '../controllers/user.controllers.js';
  import { validarJWT, haveRol } from '../middleware/index.js';
 
@@ -22,6 +23,8 @@ router.get('/usuario/:id', validarJWT,  haveRol('ADMIN_ROLE', 'USER_ROLE', 'RESP
 router.post('/usuario',  userAdd);
 
 router.patch('/usuario/:id', validarJWT,  haveRol('ADMIN_ROLE', 'USER_ROLE',), userUpdate);
+
+router.put('/updatePassword', validarJWT,  haveRol('ADMIN_ROLE', 'USER_ROLE',), updatePassword);
 
 router.delete(
   '/usuario/:id',

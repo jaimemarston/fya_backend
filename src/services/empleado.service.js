@@ -28,6 +28,7 @@ const importEmpleados = async (filePath) => {
       cargo: row[15].toString().trim(),
       email: row[14].toString().trim(),
     };
+    console.log(registro.estado)
     return registro
   });
 
