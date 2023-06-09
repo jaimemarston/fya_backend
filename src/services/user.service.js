@@ -14,6 +14,7 @@ const dataUser = await  data.map((row) => {
     codigo: row.codigo,
     dni: row.docIdentidad,
     password: bcryptjs.hashSync(row.docIdentidad, salt),
+    estado: row.estado,
     email: row.email,
     rol: 'USER_ROLE'
 
