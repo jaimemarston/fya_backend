@@ -38,7 +38,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /data/postgres
     volumes:
-      - sql:/var/lib/postgresql/data
+      - postgresDB:/var/lib/postgresql/data
     ports:
       - '5432:${POSTGRES_PORT}'
 
@@ -47,6 +47,6 @@ services:
     restart: unless-stopped
     ports:
       - 8090:8080
+
 volumes:
   postgresDB:
-  sql:
