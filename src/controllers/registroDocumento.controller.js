@@ -450,7 +450,7 @@ try {
 /*       x: x - image.width / 2, // Ajusta la posición de la imagen
     y: y - image.height / 2, */
     x: 70,
-    y: 65 ,
+    y: 60 ,
     width: 45,
     height: 45,
   });
