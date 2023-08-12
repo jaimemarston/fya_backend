@@ -33,7 +33,7 @@ class Server {
 
   connection = async () => {
     try {
-      await sequelize.sync({ force: false });
+      await sequelize.sync({ force: false});
      
       await sequelize.authenticate();
       console.log(`========= Conectado la database =========`);
@@ -88,7 +88,7 @@ class Server {
     this.app.listen(this.port, () => {
       console.log(`========= Conectado al servidor =========`);
 
-      console.log(`========= En el puerto =========`, 4000);
+      console.log(`========= En el puerto =========`, this.port);
     });
   }
 }

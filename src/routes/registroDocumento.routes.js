@@ -11,7 +11,8 @@ import {
   firmarDoc,
   uploadfile,
   getBoletasMay,
-  setFirmas
+  setFirmas,
+  descargarDocumentosPorIds
 } from '../controllers/registroDocumento.controller.js';
 import { validarJWT, haveRol } from '../middleware/index.js';
 import multer from "multer";
@@ -76,5 +77,7 @@ router.post('/firmar_doc', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), firma
 router.put('/regdoc/:id', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarUpdate);
 router.delete('/regdoc/:id', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarDelete);
 router.delete('/regdocBloque', validarJWT, haveRol('ADMIN_ROLE', 'USER_ROLE'), lugarBlockDelete);
+
+router.post('/descargar-por-id',descargarDocumentosPorIds);
 
 export default router;

@@ -4,11 +4,11 @@ import { RegistroDocumento, Usuario, registroEmpleado } from '../models/index.js
 import fs from "fs";
 import multer from "multer";
 import {PDFDocument}  from 'pdf-lib';
-const carpeta = '../../../public/uploads';
-import {  Sequelize } from "sequelize";
+
+import {  Op, Sequelize } from "sequelize";
 
 import path from "path";
-
+import archiver from 'archiver';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -605,6 +605,43 @@ const lugarBlockDelete = (req = request, res = response) => {
   }
 };
 
+const descargarDocumentosPorIds = async (req, res) => {
+  const { body: ids } = req;
+
+  try {
+
+    const documentos = await RegistroDocumento.findAll({
+      attributes: ['nombredoc'],
+      where: {
+        id: {
+          [Op.in]: ids,
+        },
+      },
+    });
+
+    const uploadsFolder = path.join(process.cwd(), 'public', 'uploads'); // Ruta a la carpeta de subidas
+
+    res.setHeader('Content-Disposition', 'attachment; filename=documentos.zip');
+    res.setHeader('Content-Type', 'application/zip');
+
+    const archive = archiver  ('zip', { zlib: { level: 9 } });
+
+    archive.pipe(res);
+
+    for (const documento of documentos) {
+      const filePath = path.join(uploadsFolder, documento.nombredoc);
+      if (fs.existsSync(filePath)) {
+        archive.file(filePath, { name: documento.nombredoc });
+      }
+    }
+
+    await archive.finalize();
+  } catch (error) {
+    console.error('Error al buscar o crear archivos zip:', error);
+    res.status(500).send('Error al buscar o crear archivos zip');
+  }
+};
+
 
 
 export {
@@ -619,5 +656,6 @@ export {
   uploadfile,
   firmarDoc,
   getBoletasMay,
-  setFirmas
+  setFirmas,
+  descargarDocumentosPorIds
 };
