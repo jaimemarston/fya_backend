@@ -22,6 +22,7 @@ export const registroEmpleado = sequelize.define('registroEmpleado', {
   },
   ndocumento: {
     type: DataTypes.STRING,
+    unique: true,
   },
   phone: {
     type: DataTypes.STRING,

@@ -36,7 +36,7 @@ class Server {
       await sequelize.sync({ force: false});
      
       await sequelize.authenticate();
-      console.log(`========= Conectado la database =========`);
+      console.log(`========= <> Conectado la database <> =========`);
     
     } catch (error) {
       console.log(error);
@@ -86,7 +86,7 @@ class Server {
 
   listen() {
     this.app.listen(this.port, () => {
-      console.log(`========= Conectado al servidor =========`);
+      console.log(`========= <> Conectado al servidor <> =========`);
 
       console.log(`========= En el puerto =========`, this.port);
     });

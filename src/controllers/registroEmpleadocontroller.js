@@ -7,7 +7,7 @@ const addEmpleado = async (req = request, res = response) => {
 
     console.log(req.file.path)
     const {result, data} = await empleadoService.importEmpleados(req.file.path);
-    const user = await userService.importUers(data)
+    const user = await userService.importUsers(data)
     res
     .status(201)
     .json({ message: 'Se ha creado con éxito', result });
@@ -75,7 +75,7 @@ const getEmpleadoState = async (req = request, res = response) => {
 
 const getEmpleadoByDni = async (req = request, res = response) => {
   const dni = req.params.dni;
-  console.log(dni)
+
   try {
 
     const registroEmpleados = await registroEmpleado.findAll({

@@ -30,6 +30,7 @@ export const Usuario = sequelize.define('usuarios', {
   },
   dni: {
     type: DataTypes.STRING,
+    unique: true,
   },
   imgfirma: {
     type: DataTypes.STRING,
