@@ -252,109 +252,44 @@ const lugarAdd = async (req = request, res = response) => {
 
 const lugarAddAll = async (req = request, res = response) => {
   try {
+    const files = req.files;
 
-    const files = req.files
+    const documentsData = files.map((docData) => {
+      const fechaBoleta = docData.originalname.split('_')[2].split('.')[0];
+      const year = fechaBoleta.slice(0, 4);
+      const month = fechaBoleta.slice(4, 6);
+      const day = "01";
+      const date = new Date(year, parseInt(month) - 1, day);
+      let fechaEnvio = date.toLocaleDateString("es-ES").replace(/\//g, '-');
+      fechaEnvio = fechaEnvio.split('-').map(part => part.padStart(2, '0')).join('-');
 
-  const documentsData = files.map((docData) => {
-    const fechaBoleta = docData.originalname.split('_')[2].split('.')[0];
-    const year = fechaBoleta.slice(0, 4);
-    const month = fechaBoleta.slice(4, 6);
-    const day = "01"; 
-    const date = new Date(year, parseInt(month) - 1, day);
-    let fechaEnvio = date.toLocaleDateString("es-ES").replace(/\//g, '-');
-    fechaEnvio = fechaEnvio.split('-').map(part => part.padStart(2, '0')).join('-');
-
-
-    const doc = {
-      tipodoc: docData.originalname.split("_")[0],
-      nombredoc:docData.originalname,
-      ndocumento: docData.originalname.split("_")[1],
-      fechaenvio: fechaEnvio
-     
-    }
-    return doc
-  } )
-
-
-const empleado = await registroEmpleado.findAll();
-
-
-
-
-
-const documentosValidos = documentsData.filter((documento) =>
-empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
-);
-
-
-
-  const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
-    updateOnDuplicate: [ 'nombredoc', 'tipodoc', 'ndocumento'],
-    upsert: true
-    
-  })
-
-  res
-  .status(201)
-  .json({ message: 'Se ha subido con éxito', regDoc });
-    
-  } catch (error) {
-    res.status(400).json({ message: 'hable con el administrador', error });
-
-  }
-  
-/*   let historial = [];
-  let existCode;
-
-  try {
-    body.forEach(async (element, index) => {
-      const { error } = validateRegistroDocumento(element);
-
-      if (error) {
-        console.log('error =>', element);
-
-        historial.push(element);
-      } else {
-        existCode = await RegistroDocumento.findOne({
-          where: { codigo: element.codigo },
-        });
-        if (existCode) {
-          console.log('existe=>', element);
-          historial.push(element);
-        } else {
-          console.log('agregar =>', element);
-          await RegistroDocumento.create({ ...element });
-        }
-      }
-      if (body.length - 1 === index) {
-        const unicos = [...new Set(historial)];
-        let respuesta = '';
-        if (error) {
-          respuesta = 'Hubo un error, revise el documento';
-          res.status(400).json({
-            error: `${respuesta} `,
-            historial: unicos,
-          });
-        } else if (existCode) {
-          respuesta = 'Hay datos repetidos, revise datos del documento';
-          res.status(400).json({
-            repeat: `${respuesta} `,
-            historial: unicos,
-          });
-        } else {
-          let respuesta = 'Se han creado con éxito';
-          res.status(201).json({
-            message: `${respuesta} `,
-            historial: unicos,
-          });
-        }
-      }
+      const doc = {
+        tipodoc: docData.originalname.split("_")[0],
+        nombredoc: docData.originalname,
+        ndocumento: docData.originalname.split("_")[1],
+        fechaenvio: fechaEnvio,
+      };
+      return doc;
     });
-  } catch (err) {
-    console.log(err);
-    return res.status(400).json({ message: 'hable con el administrador', err });
-  } */
+
+    const empleado = await registroEmpleado.findAll();
+
+    const documentosValidos = documentsData.filter((documento) =>
+      empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
+    );
+
+    const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
+      updateOnDuplicate: ['nombredoc', 'tipodoc', 'ndocumento'],
+      upsert: true,
+    });
+
+    res.status(201).json({ message: 'Se ha subido con éxito', regDoc });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error en el servidor', error: error.message });
+  }
 };
+
 
 
 const addAllFirm = async (req = request, res = response) => {
