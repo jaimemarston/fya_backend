@@ -278,10 +278,14 @@ const lugarAddAll = async (req = request, res = response) => {
       empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
     );
 
-    const regDoc = await RegistroDocumento.bulkCreate(documentosValidos, {
-      updateOnDuplicate: ['nombredoc', 'tipodoc', 'ndocumento'],
-      upsert: true,
-    });
+	let regDoc;
+	documentosValidos.forEach( document => {
+	    regDoc = await RegistroDocumento.create(documentosValidos, {
+	      updateOnDuplicate: ['nombredoc'],
+	      upsert: true,
+	    });
+	});
+ 
 
     res.status(201).json({ message: 'Se ha subido con éxito', regDoc });
   } catch (error) {
