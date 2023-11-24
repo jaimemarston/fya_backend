@@ -305,43 +305,46 @@ const fechaActualString = () => {
     );
 
 
-	const repeatedElements = [];
+const repeatedElements = [];
+const docsToInsert = [];
 
-      const filteredElements = documentsData.filter(el => {
-        if(!repeatedElements.includes(el.ndocumento)) {
-          repeatedElements.push(el.ndocumento);
-          return true; // devolver verdadero para los elementos únicos
-        }
-        return false; // devolver falso para los elementos repetidos
-      })
-  
-      const values = filteredElements;
+for (const element of documentsData) {
+  if (!repeatedElements.includes(element.ndocumento)) {
+    repeatedElements.push(element.ndocumento);
 
-      let query = `INSERT INTO "public"."registroDocumentos" (nombredoc, ndocumento, tipodoc, fechaenvio, "createdAt", "updatedAt") VALUES `;
+    // Validar que ndocumento existe en la tabla registroEmpleados
+    const empleadoExistsQuery = `
+      SELECT * FROM "public"."registroEmpleados" WHERE ndocumento = '${element.ndocumento}';
+    `;
+    const empleadoExistsResult = await sequelize.query(empleadoExistsQuery);
 
-      filteredElements.forEach((item, index) => {
-        const valuesString = `(
-          '${item.nombredoc}',
-          '${item.ndocumento}',
-          '${item.tipodoc}',
-          '${item.fechaenvio}',
-          '${item.createdAt}',
-          '${item.updatedAt}'
-          )`;
-        query += valuesString;
+    if (empleadoExistsResult && empleadoExistsResult[0] && empleadoExistsResult[0].length > 0) {
+      // El ndocumento existe en la tabla registroEmpleados, ahora verificamos en registroDocumentos
+      const documentoExistsQuery = `
+        SELECT * FROM "public"."registroDocumentos" WHERE nombredoc = '${element.nombredoc}' AND ndocumento = '${element.ndocumento}';
+      `;
+      const documentoExistsResult = await sequelize.query(documentoExistsQuery);
 
-        if (index !== values.length - 1) {
-          query += ', ';
-        }
-      });
-      
-
-    const result = await sequelize.query(query);
-
-    const conflictRows = result[0].filter(row => row.ndocumento != null);
-    if (conflictRows.length > 0) {
-      console.log(`Los siguientes registros causaron un conflicto de clave única: ${JSON.stringify(conflictRows)}`);
+      if (!(documentoExistsResult && documentoExistsResult[0] && documentoExistsResult[0].length > 0)) {
+        // El elemento no existe en la tabla registroDocumentos, lo agregamos a docsToInsert
+        docsToInsert.push(element);
+      }
+    } else {
+      console.log(`El ndocumento ${element.ndocumento} no existe en la tabla registroEmpleados.`);
     }
+  }
+}
+
+
+// Ahora docsToInsert contiene solo los elementos que no están en la base de datos
+if (docsToInsert.length > 0) {
+  const query = `
+    INSERT INTO "public"."registroDocumentos" (nombredoc, ndocumento, tipodoc, fechaenvio, "createdAt", "updatedAt")
+    VALUES ${docsToInsert.map(item => `('${item.nombredoc}', '${item.ndocumento}', '${item.tipodoc}', '${item.fechaenvio}', '${item.createdAt}', '${item.updatedAt}')`).join(', ')};
+  `;
+
+  const result = await sequelize.query(query);
+}
 
     res.status(201).json({ message: 'Se ha subido con éxito'});
 
