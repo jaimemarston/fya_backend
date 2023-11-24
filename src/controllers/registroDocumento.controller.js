@@ -1,4 +1,5 @@
 import { request, response } from 'express';
+import  { sequelize }  from '../database/db.js';
 import { validateRegistroDocumento } from '../helpers/schemaRegistroDocumento.js';
 import { RegistroDocumento, Usuario, registroEmpleado } from '../models/index.js';
 import fs from "fs";
@@ -250,7 +251,30 @@ const lugarAdd = async (req = request, res = response) => {
   }
 };
 
+
 const lugarAddAll = async (req = request, res = response) => {
+
+const fechaActualString = () => {
+
+	const ahora = new Date();
+
+	const año = ahora.getFullYear();
+	const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+	const día = String(ahora.getDate()).padStart(2, '0');
+
+	const horas = String(ahora.getHours()).padStart(2, '0');
+	const minutos = String(ahora.getMinutes()).padStart(2, '0');
+	const segundos = String(ahora.getSeconds()).padStart(2, '0');
+	const milisegundos = String(ahora.getMilliseconds()).padStart(3, '0');
+
+	const zonaHoraria = new Date().toTimeString().slice(9, 15);
+
+	const fechaHoraString = `${año}-${mes}-${día} ${horas}:${minutos}:${segundos}.${milisegundos}${zonaHoraria}`;
+	return fechaHoraString;
+
+}
+
+
   try {
     const files = req.files;
 
@@ -268,6 +292,8 @@ const lugarAddAll = async (req = request, res = response) => {
         nombredoc: docData.originalname,
         ndocumento: docData.originalname.split("_")[1],
         fechaenvio: fechaEnvio,
+	createdAt: fechaActualString(),
+	updatedAt: fechaActualString()
       };
       return doc;
     });
@@ -278,16 +304,47 @@ const lugarAddAll = async (req = request, res = response) => {
       empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
     );
 
-	let regDoc;
-	documentosValidos.forEach( document => {
-	    regDoc = await RegistroDocumento.create(documentosValidos, {
-	      updateOnDuplicate: ['nombredoc'],
-	      upsert: true,
-	    });
-	});
- 
 
-    res.status(201).json({ message: 'Se ha subido con éxito', regDoc });
+	const repeatedElements = [];
+
+      const filteredElements = documentsData.filter(el => {
+        if(!repeatedElements.includes(el.ndocumento)) {
+          repeatedElements.push(el.ndocumento);
+          return true; // devolver verdadero para los elementos únicos
+        }
+        return false; // devolver falso para los elementos repetidos
+      })
+  
+      const values = filteredElements;
+
+      let query = `INSERT INTO "public"."registroDocumentos" (nombredoc, ndocumento, tipodoc, fechaenvio, "createdAt", "updatedAt") VALUES `;
+
+      filteredElements.forEach((item, index) => {
+        const valuesString = `(
+          '${item.nombredoc}',
+          '${item.ndocumento}',
+          '${item.tipodoc}',
+          '${item.fechaenvio}',
+          '${item.createdAt}',
+          '${item.updatedAt}'
+          )`;
+        query += valuesString;
+
+        if (index !== values.length - 1) {
+          query += ', ';
+        }
+      });
+      
+
+    const result = await sequelize.query(query);
+
+    const conflictRows = result[0].filter(row => row.ndocumento != null);
+    if (conflictRows.length > 0) {
+      console.log(`Los siguientes registros causaron un conflicto de clave única: ${JSON.stringify(conflictRows)}`);
+    }
+
+    res.status(201).json({ message: 'Se ha subido con éxito'});
+
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ message: 'Error en el servidor', error: error.message });
