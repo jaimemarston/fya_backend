@@ -252,6 +252,109 @@ const lugarAdd = async (req = request, res = response) => {
 };
 
 
+const cargamasivaDeBoletas = async (req = request, res = response) => {
+
+const fechaActualString = () => {
+
+	const ahora = new Date();
+
+	const año = ahora.getFullYear();
+	const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+	const día = String(ahora.getDate()).padStart(2, '0');
+
+	const horas = String(ahora.getHours()).padStart(2, '0');
+	const minutos = String(ahora.getMinutes()).padStart(2, '0');
+	const segundos = String(ahora.getSeconds()).padStart(2, '0');
+	const milisegundos = String(ahora.getMilliseconds()).padStart(3, '0');
+
+	const zonaHoraria = new Date().toTimeString().slice(9, 15);
+
+	const fechaHoraString = `${año}-${mes}-${día} ${horas}:${minutos}:${segundos}.${milisegundos}${zonaHoraria}`;
+	return fechaHoraString;
+
+}
+
+
+  try {
+    const files = req.files;
+
+    const documentsData = files.map((docData) => {
+      const fechaBoleta = docData.originalname.split('_')[2].split('.')[0];
+      const year = fechaBoleta.slice(0, 4);
+      const month = fechaBoleta.slice(4, 6);
+      const day = "01";
+      const date = new Date(year, parseInt(month) - 1, day);
+      let fechaEnvio = date.toLocaleDateString("es-ES").replace(/\//g, '-');
+      fechaEnvio = fechaEnvio.split('-').map(part => part.padStart(2, '0')).join('-');
+
+      const doc = {
+        tipodoc: docData.originalname.split("_")[0],
+        nombredoc: docData.originalname,
+        ndocumento: docData.originalname.split("_")[1],
+        fechaenvio: fechaEnvio,
+        createdAt: fechaActualString(),
+        updatedAt: fechaActualString()
+      };
+      return doc;
+    });
+
+/*     const empleado = await registroEmpleado.findAll();
+
+    const documentosValidos = documentsData.filter((documento) =>
+      empleado.some((empleado) => empleado.docIdentidad === documento.ndocumento)
+    );
+ */
+
+const repeatedElements = [];
+const docsToInsert = [];
+
+for (const element of documentsData) {
+  if (!repeatedElements.includes(element.nombredoc)) {
+    repeatedElements.push(element.nombredoc);
+
+    // Validar que ndocumento existe en la tabla registroEmpleados
+    const empleadoExistsQuery = `
+      SELECT * FROM "public"."registroEmpleados" WHERE ndocumento = '${element.ndocumento}';
+    `;
+    const empleadoExistsResult = await sequelize.query(empleadoExistsQuery);
+
+    if (empleadoExistsResult && empleadoExistsResult[0] && empleadoExistsResult[0].length > 0) {
+      // El ndocumento existe en la tabla registroEmpleados, ahora verificamos en registroDocumentos
+      const documentoExistsQuery = `
+        SELECT * FROM "public"."registroDocumentos" WHERE nombredoc = '${element.nombredoc}' AND ndocumento = '${element.ndocumento}';
+      `;
+      const documentoExistsResult = await sequelize.query(documentoExistsQuery);
+
+      if (!(documentoExistsResult && documentoExistsResult[0] && documentoExistsResult[0].length > 0)) {
+        // El elemento no existe en la tabla registroDocumentos, lo agregamos a docsToInsert
+        docsToInsert.push(element);
+      }
+    } else {
+      console.log(`El ndocumento ${element.ndocumento} no existe en la tabla registroEmpleados.`);
+    }
+  }
+}
+
+
+// Ahora docsToInsert contiene solo los elementos que no están en la base de datos
+if (docsToInsert.length > 0) {
+  const query = `
+    INSERT INTO "public"."registroDocumentos" (nombredoc, ndocumento, tipodoc, fechaenvio, "createdAt", "updatedAt")
+    VALUES ${docsToInsert.map(item => `('${item.nombredoc}', '${item.ndocumento}', '${item.tipodoc}', '${item.fechaenvio}', '${item.createdAt}', '${item.updatedAt}')`).join(', ')};
+  `;
+
+  const result = await sequelize.query(query);
+}
+
+    res.status(201).json({ message: 'Se ha subido con éxito'});
+
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Error en el servidor', error: error.message });
+  }
+};
+
+
 const lugarAddAll = async (req = request, res = response) => {
 
 const fechaActualString = () => {
@@ -656,5 +759,6 @@ export {
   firmarDoc,
   getBoletasMay,
   setFirmas,
-  descargarDocumentosPorIds
+  descargarDocumentosPorIds,
+  cargamasivaDeBoletas
 };
